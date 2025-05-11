@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "@astrojs/vue": "^5.0.7",
+    "@astrolib/seo": "^1.0.0-beta.8",
     "astro": "^5.5.2",
+    "sass": "^1.85.1",
+    "solid-js": "^1.9.5",
     "vue": "^3.5.13"
   }
 }
