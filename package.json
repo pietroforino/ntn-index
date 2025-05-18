@@ -13,6 +13,7 @@
     "@astrojs/vue": "^5.0.7",
     "@astrolib/seo": "^1.0.0-beta.8",
     "@vercel/analytics": "^1.5.0",
+    "@vercel/speed-insights": "^1.2.0",
     "astro": "^5.5.2",
     "node-fetch": "^3.3.2",
     "sass": "^1.85.1",
