@@ -1,6 +1,6 @@
 ---
 import { getProjects } from '../data/strapi';
-
+import Analytics from '@vercel/analytics/astro'
 import { createSignal } from 'solid-js';
 import Lightbox from '../components/Lightbox.astro';
 
@@ -185,6 +185,8 @@ interface Project {
     })}
   </div>
 </main>
+
+<Analytics />
 
 <!-- <Lightbox /> -->
 
