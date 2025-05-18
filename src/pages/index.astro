@@ -129,8 +129,8 @@ interface Project {
   <div class="container">
     {[...projects].sort((a, b) => a.year - b.year).map((project, index) => {
       // Raccolta immagini (main + gallery)
-      const mainImageUrl = 'https://timely-cow-17218bd8b1.strapiapp.com' + project.main_image.url;
-      const galleryImages = (project.gallery || []).map(img => 'https://timely-cow-17218bd8b1.strapiapp.com' + img.url);
+      const mainImageUrl = project.main_image.url;
+      const galleryImages = (project.gallery || []).map(img => img.url);
       const allImages = [mainImageUrl, ...galleryImages];
 
       return (
@@ -140,9 +140,9 @@ interface Project {
             src={mainImageUrl} 
             alt={project.title}
             srcset={`
-              https://timely-cow-17218bd8b1.strapiapp.com${project.main_image.formats.small?.url} 500w,
-              https://timely-cow-17218bd8b1.strapiapp.com${project.main_image.formats.medium?.url} 750w,
-              https://timely-cow-17218bd8b1.strapiapp.com${project.main_image.formats.large?.url} 1000w
+              ${project.main_image.formats.small?.url} 500w,
+              ${project.main_image.formats.medium?.url} 750w,
+              ${project.main_image.formats.large?.url} 1000w
             `}
             sizes="(max-width: 600px) 500px, 
                    (max-width: 900px) 750px, 
