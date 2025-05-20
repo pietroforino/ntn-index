@@ -152,7 +152,7 @@ interface Project {
 
 <main>
   <div class="menu">
-    <img src="src/assets/ntn_logo.svg" alt="" />
+    <img src="ntn_logo.svg" alt="" />
   </div>
   <div class="container">
     {
@@ -202,10 +202,10 @@ interface Project {
 
               <div class="lightbox-overlay" style="display: none;">
                 <button class="lightbox-close">
-                  <img src="src/assets/close-icon.svg" alt="" />
+                  <img src="close-icon.svg" alt="" />
                 </button>
                 <button class="lightbox-arrow prev">
-                  <img src="src/assets/arrow-left.svg" alt="" />
+                  <img src="arrow-left.svg" alt="" />
                 </button>
                 <div class="lightbox-content">
                   {allImages.map((image, imgIndex) => (
@@ -218,7 +218,7 @@ interface Project {
                   ))}
                 </div>
                 <button class="lightbox-arrow next">
-                  <img src="src/assets/arrow-right.svg" alt="" />
+                  <img src="arrow-right.svg" alt="" />
                 </button>
               </div>
             </div>
@@ -519,6 +519,16 @@ interface Project {
     
     .hide-mobile {
       display: none;
+    }
+
+    .row {
+      .img {
+        display: none !important
+      }
+    }
+
+    .lightbox-arrow {
+      transform: scale(0.5);
     }
 
     #row-0 {
