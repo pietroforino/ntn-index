@@ -1,81 +1,104 @@
 ---
-import { getProjects } from '../data/strapi';
+import { getProjects } from "../data/strapi";
 
-import Analytics from '@vercel/analytics/astro'
-import  SpeedInsights  from "@vercel/speed-insights/astro"
+import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
 
-import { createSignal } from 'solid-js';
-import Lightbox from '../components/Lightbox.astro';
+import { createSignal } from "solid-js";
+import Lightbox from "../components/Lightbox.astro";
 
-const projects: { images: { url: string }[]; main_image: { formats: { medium: { url: string } } }; title: string; code: string; year: number; interior?: boolean; exhibition?: boolean; objects?: boolean; graphic?: boolean; research?: boolean; urbanism?: boolean }[] = await getProjects();
+const projects: {
+  images: { url: string }[];
+  main_image: { formats: { medium: { url: string } } };
+  title: string;
+  code: string;
+  year: number;
+  interior?: boolean;
+  exhibition?: boolean;
+  objects?: boolean;
+  graphic?: boolean;
+  research?: boolean;
+  urbanism?: boolean;
+}[] = await getProjects();
 
 // Stato del lightbox con Signals di Solid.js (supportato nativamente da Astro)
 const [isOpen, setIsOpen] = createSignal(false);
-const [imageSrc, setImageSrc] = createSignal('');
-const [description, setDescription] = createSignal('');
+const [imageSrc, setImageSrc] = createSignal("");
+const [description, setDescription] = createSignal("");
 
 interface Project {
   main_image: { formats: { medium: { url: string } } };
   title: string;
 }
-
 ---
+
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"
+    />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
 
 <script is:inline>
   const handleMouseEnter = (event) => {
     const row = event.currentTarget;
-    const img = row.querySelector('.img');
+    const img = row.querySelector(".img");
     const rect = img.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
 
     if (rect.bottom > viewportHeight) {
-      img.style.top = 'auto';
-      img.style.bottom = '1.75rem';
+      img.style.top = "auto";
+      img.style.bottom = "1.75rem";
     } else {
-      img.style.top = '1.75rem';
-      img.style.bottom = 'auto';
+      img.style.top = "1.75rem";
+      img.style.bottom = "auto";
     }
-  }
+  };
 
   const handleMouseLeave = (event) => {
     const row = event.currentTarget;
-    const img = row.querySelector('.img');
-    img.style.top = '1.75rem';
-    img.style.bottom = 'auto';
-  }
+    const img = row.querySelector(".img");
+    img.style.top = "1.75rem";
+    img.style.bottom = "auto";
+  };
 
   const handleMouseClick = (event) => {
     const row = event.currentTarget;
     const images = JSON.parse(row.getAttribute("data-images"));
     openLightbox(images, row);
     console.log(images);
-    
-  }
+  };
 
   let lightboxOpen = false;
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    const rows = document.querySelectorAll('.row');
-    rows.forEach(row => {
-      row.addEventListener('mouseenter', handleMouseEnter);
-      row.addEventListener('mouseleave', handleMouseLeave);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const rows = document.querySelectorAll(".row");
+    rows.forEach((row) => {
+      row.addEventListener("mouseenter", handleMouseEnter);
+      row.addEventListener("mouseleave", handleMouseLeave);
 
       // row.addEventListener('click', handleMouseClick);
 
-      row.addEventListener('click', (event) => {
+      row.addEventListener("click", (event) => {
         if (lightboxOpen) {
           return; // Se il lightbox è già aperto, non fare nulla
         }
         lightboxOpen = true; // Imposta il flag per indicare che il lightbox è aperto
         event.stopPropagation(); // Evita che il click si propaghi alla riga
-        const lightbox = event.target.querySelector('.lightbox-overlay');
-        document.querySelectorAll('.row').forEach((r => {
-          r.classList.remove('open');
-          r.classList.add('hided');
-        }));
-        event.target.classList.add('open');
+        const lightbox = event.target.querySelector(".lightbox-overlay");
+        document.querySelectorAll(".row").forEach((r) => {
+          r.classList.remove("open");
+          r.classList.add("hided");
+        });
+        event.target.classList.add("open");
         if (lightbox) {
-          lightbox.style.display = 'flex';
+          lightbox.style.display = "flex";
           currentIndex = 0;
           updateImage();
         }
@@ -84,20 +107,21 @@ interface Project {
       const prevButton = row.querySelector(".lightbox-arrow.prev");
       const nextButton = row.querySelector(".lightbox-arrow.next");
       const imagesElement = row.querySelectorAll(".lightbox-image");
-      
+
       let currentIndex = 0;
-      
+
       function updateImage() {
         if (imagesElement.length > 1) {
           imagesElement.forEach((img, index) => {
-            img.style.display = index === currentIndex ? 'block' : 'none';
+            img.style.display = index === currentIndex ? "block" : "none";
           });
         }
       }
 
       prevButton.addEventListener("click", (event) => {
         event.stopPropagation(); // Prevent closing the lightbox
-        currentIndex = (currentIndex - 1 + imagesElement.length) % imagesElement.length;
+        currentIndex =
+          (currentIndex - 1 + imagesElement.length) % imagesElement.length;
         updateImage();
       });
 
@@ -107,208 +131,182 @@ interface Project {
         updateImage();
       });
 
-      const closeButton = row.querySelector('.lightbox-close');
+      const closeButton = row.querySelector(".lightbox-close");
       if (closeButton) {
-        closeButton.addEventListener('click', (event) => {
+        closeButton.addEventListener("click", (event) => {
           event.stopPropagation(); // Evita che il click si propaghi alla riga
-          const lightbox = row.querySelector('.lightbox-overlay');
-          document.querySelectorAll('.row').forEach((r => {
-            r.classList.remove('open');
-            r.classList.remove('hided');
-          }));
+          const lightbox = row.querySelector(".lightbox-overlay");
+          document.querySelectorAll(".row").forEach((r) => {
+            r.classList.remove("open");
+            r.classList.remove("hided");
+          });
           if (lightbox) {
-            lightbox.style.display = 'none'; // Nascondi la lightbox
-            lightboxOpen = false; 
+            lightbox.style.display = "none"; // Nascondi la lightbox
+            lightboxOpen = false;
           }
         });
       }
-
     });
   });
 </script>
 
 <main>
-  <div>menu</div>
+  <div class="menu">
+    <img src="src/assets/ntn_logo.svg" alt="" />
+  </div>
   <div class="container">
-    {[...projects].sort((a, b) => a.year - b.year).map((project, index) => {
-      // Raccolta immagini (main + gallery)
-      const mainImageUrl = project.main_image.url;
-      const galleryImages = (project.gallery || []).map(img => img.url);
-      const allImages = [mainImageUrl, ...galleryImages];
+    {
+      [...projects]
+        .sort((a, b) => a.year - b.year)
+        .map((project, index) => {
+          // Raccolta immagini (main + gallery)
+          const mainImageUrl = project.main_image.url;
+          const galleryImages = (project.gallery || []).map((img) => img.url);
+          const allImages = [mainImageUrl, ...galleryImages];
 
-      return (
-        <div class="row" id={`row-${index}`} data-images={JSON.stringify(allImages)}>
-          <img 
-            class="img" 
-            src={mainImageUrl} 
-            alt={project.title}
-            srcset={`
+          return (
+            <div
+              class="row"
+              id={`row-${index}`}
+              data-images={JSON.stringify(allImages)}
+            >
+              <img
+                class="img"
+                src={mainImageUrl}
+                alt={project.title}
+                srcset={`
               ${project.main_image.formats.small?.url} 500w,
               ${project.main_image.formats.medium?.url} 750w,
               ${project.main_image.formats.large?.url} 1000w
             `}
-            sizes="(max-width: 600px) 500px, 
+                sizes="(max-width: 600px) 500px, 
                    (max-width: 900px) 750px, 
                    1000px"
-          />
-          <div class="left" style="pointer-events: none;">
-            <p>{project.code}</p>
-            <p>{project.year}</p>
-            <p>{project.title}</p>
-          </div>
-          <div class="right" style="pointer-events: none;">
-            <div class={`field ${project.interior ? 'active' : ''}`}></div>
-            <div class={`field ${project.exhibition ? 'active' : ''}`}></div>
-            <div class={`field ${project.objects ? 'active' : ''}`}></div>
-            <div class={`field ${project.graphic ? 'active' : ''}`}></div>
-            <div class={`field ${project.research ? 'active' : ''}`}></div>
-            <div class={`field ${project.urbanism ? 'active' : ''}`}></div>
-          </div>
-          <div></div>
-          
-          
-          <div class="lightbox-overlay" style="display: none;">
-            <button class="lightbox-close">&times;</button>
-            <button class="lightbox-arrow prev">&#10094;</button>
-            <div class="lightbox-content">
-              {allImages.map((image, imgIndex) => (
-                <img
-                  key={imgIndex}
-                  src={image}
-                  alt={`Image ${imgIndex + 1} of ${project.title}`}
-                  class="lightbox-image"
-                />
-              ))}
+              />
+              <div class="left" style="pointer-events: none;">
+                <div>
+                  <p>{project.code}</p>
+                  <p>{project.year}</p>
+                </div>
+                <p>{project.title}</p>
+              </div>
+              <div class="right" style="pointer-events: none;">
+                <div class={`field ${project.interior ? "active" : ""}`} />
+                <div class={`field ${project.exhibition ? "active" : ""}`} />
+                <div class={`field ${project.objects ? "active" : ""}`} />
+                <div class={`field ${project.graphic ? "active" : ""}`} />
+                <div class={`field ${project.research ? "active" : ""}`} />
+                <div class={`field ${project.urbanism ? "active" : ""}`} />
+              </div>
+              <div class="hide-mobile" />
+
+              <div class="lightbox-overlay" style="display: none;">
+                <button class="lightbox-close">
+                  <img src="src/assets/close-icon.svg" alt="" />
+                </button>
+                <button class="lightbox-arrow prev">
+                  <img src="src/assets/arrow-left.svg" alt="" />
+                </button>
+                <div class="lightbox-content">
+                  {allImages.map((image, imgIndex) => (
+                    <img
+                      key={imgIndex}
+                      src={image}
+                      alt={`Image ${imgIndex + 1} of ${project.title}`}
+                      class="lightbox-image"
+                    />
+                  ))}
+                </div>
+                <button class="lightbox-arrow next">
+                  <img src="src/assets/arrow-right.svg" alt="" />
+                </button>
+              </div>
             </div>
-            <button class="lightbox-arrow next">&#10095;</button>
-          </div>
-          
-        </div>
-      );
-    })}
+          );
+        })
+    }
   </div>
 </main>
 
 <Analytics />
 <SpeedInsights />
 
-<!-- <Lightbox /> -->
 
 <style lang="scss">
 
-// .lightbox-overlay {
-//   display: none;
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   width: 100%;
-//   height: 100%;
-//   background: rgba(0, 0, 0, 0.8);
-//   align-items: center;
-//   z-index: 10;
-//   flex-direction: row;
-//   justify-content: space-between;
-// }
+  .menu {
+    padding: 0.5rem;
+  }
 
-// .lightbox-content {
-//   display: flex;
-//   flex-wrap: wrap;
-//   gap: 1rem;
-// }
+  .lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+  }
 
-// .lightbox-image {
-//   max-width: 100%;
-//   max-height: 100%;
-// }
+  .lightbox-content {
+    text-align: center;
+    position: relative;
+    max-width: 100%;
+    padding: 10px;
+    max-height: 80vh;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
 
-// .lightbox-close {
-//   position: absolute;
-//   top: 1rem;
-//   right: 1rem;
-//   background: none;
-//   border: none;
-//   color: white;
-//   font-size: 2rem;
-//   cursor: pointer;
-// }
+  .lightbox-content img {
+    max-width: 100%;
+    max-height: 100%;
+    user-select: none;
+  }
 
+  .lightbox-close {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: black;
+  }
 
+  .lightbox-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0px;
+    z-index: 100;
+    background-color: transparent;
+  }
 
+  .lightbox-arrow.prev {
+    left: 5px;
+  }
 
+  .lightbox-arrow.next {
+    right: 5px;
+  }
 
-.lightbox-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.0);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-}
-
-.lightbox-content {
-  text-align: center;
-  position: relative;
-  max-width: 100%;
-  padding: 10px;
-  max-height: calc(100% - 14px);
-  aspect-ratio: 1 / 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.lightbox-content img {
-  max-width: 100%;
-  max-height: 100%;
-  user-select: none;
-}
-
-.lightbox-close {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-  color: black;
-}
-
-.lightbox-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.5);
-  border: none;
-  font-size: 2rem;
-  cursor: pointer;
-  padding: 0px;
-}
-
-.lightbox-arrow.prev {
-  left: 5px;
-}
-
-.lightbox-arrow.next {
-  right: 5px;
-}
-
-
-
-
-
-
-
-    p {
-        margin: 0;
-      font-family: monospace;
-      font-size: .8rem;
-    }
+  p {
+    margin: 0;
+    font-family: monospace;
+    font-size: 0.8rem;
+  }
 
   body {
     margin: 0;
@@ -320,22 +318,22 @@ interface Project {
     justify-content: space-between;
     min-height: 100vh;
   }
-    .container {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-direction: column;
-      padding: .5rem;
-      padding-bottom: 0;
-      // background: white;
+  .container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    padding: 0.5rem;
+    padding-bottom: 0;
+    // background: white;
 
-      &:hover {
-        .row {
-          p {
-            // color: #00000080 !important
-          }
+    &:hover {
+      .row {
+        p {
+          // color: #00000080 !important
         }
       }
+    }
 
     .labels {
       display: flex;
@@ -346,7 +344,7 @@ interface Project {
 
       div {
         width: 5px;
-        
+
         p {
           writing-mode: sideways-lr;
           text-orientation: mixed;
@@ -363,20 +361,20 @@ interface Project {
       align-items: center;
       width: 100%;
       position: relative;
-      padding: .25rem 0;
+      padding: 0.25rem 0;
 
       &.hided {
-        opacity: .25;
+        opacity: 0.25;
 
         .img {
           display: none !important;
         }
 
         &:hover {
-        p {
-          color: black !important;
+          p {
+            color: black !important;
+          }
         }
-      }
       }
 
       &.open {
@@ -412,10 +410,16 @@ interface Project {
         width: 50vw;
         z-index: 100;
 
+        div {
+          display: flex;
+          flex-direction: row;
+          gap: 2vw;
+          pointer-events: none;
+        }
+
         p {
           cursor: pointer;
           color: black;
-          // mix-blend-mode: difference;
         }
       }
 
@@ -426,7 +430,7 @@ interface Project {
         flex-direction: row;
         gap: 5vw;
         pointer-events: none;
-        
+
         .field {
           width: 5px;
           height: 5px;
@@ -457,35 +461,78 @@ interface Project {
             font-size: 0.8rem;
             position: absolute;
             bottom: 1rem;
-            left: .75rem;
+            left: 0.75rem;
             pointer-events: none;
+            height: 70px;
           }
-          
+
           &:nth-child(1)::before {
-            content: 'interior';
+            content: "interior";
           }
 
           &:nth-child(2)::before {
-            content: 'exhibitions';
+            content: "exhibitions";
           }
 
           &:nth-child(3)::before {
-            content: 'objects';
+            content: "objects";
           }
 
           &:nth-child(4)::before {
-            content: 'graphic';
+            content: "graphic";
           }
 
           &:nth-child(5)::before {
-            content: 'research';
+            content: "research";
           }
 
           &:nth-child(6)::before {
-            content: 'urbanism';
+            content: "urbanism";
           }
         }
       }
+    }
+  }
+
+  @media (max-width: 720px) {
+    .left {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      flex-direction: row;
+      gap: 2vw;
+      width: 70vw !important;
+      z-index: 100;
+
+      div {
+        display: flex;
+        flex-direction: column !important;
+        gap: 0.25vw !important;
+        pointer-events: none;
+      }
+
+      p {
+        cursor: pointer;
+        color: black;
+      }
+    }
+    
+    .hide-mobile {
+      display: none;
+    }
+
+    #row-0 {
+      .right {
+        .field {
+          &::before {
+            transform: translateX(-50%) rotate(0deg) !important;
+            left: 3px !important;
+          }
+        }
+      }
+    }
+    .labels div p {
+      transform: rotate(90deg);
     }
   }
 </style>
