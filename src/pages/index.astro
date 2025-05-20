@@ -540,8 +540,11 @@ interface Project {
       .right {
         .field {
           &::before {
-            transform: translateX(-50%) rotate(0deg) !important;
+            writing-mode: horizontal-tb !important;
+            height: auto !important;
+            transform: translateX(-50%) rotate(-90deg) !important;
             left: 3px !important;
+            width: 0px !important;
           }
         }
       }
