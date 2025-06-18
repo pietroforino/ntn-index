@@ -12,6 +12,7 @@ const projects: {
   title: string;
   code: string;
   year: number;
+  rank?: number;
   interior?: boolean;
   exhibition?: boolean;
   objects?: boolean;
@@ -187,7 +188,7 @@ interface Project {
     </div>
     {
       [...projects]
-        .sort((a, b) => a.year - b.year)
+        .sort((a, b) => a.rank - b.rank)
         .map((project, index) => {
           // Raccolta immagini (main + gallery)
           const mainImageUrl = project.main_image.url;
