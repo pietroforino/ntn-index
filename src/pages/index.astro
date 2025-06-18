@@ -5,7 +5,6 @@ import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 
 import { createSignal } from "solid-js";
-import Lightbox from "../components/Lightbox.astro";
 
 const projects: {
   images: { url: string }[];
@@ -20,11 +19,6 @@ const projects: {
   research?: boolean;
   urbanism?: boolean;
 }[] = await getProjects();
-
-// Stato del lightbox con Signals di Solid.js (supportato nativamente da Astro)
-const [isOpen, setIsOpen] = createSignal(false);
-const [imageSrc, setImageSrc] = createSignal("");
-const [description, setDescription] = createSignal("");
 
 interface Project {
   main_image: { formats: { medium: { url: string } } };
@@ -48,6 +42,7 @@ interface Project {
 <script is:inline>
   const handleMouseEnter = (event) => {
     const row = event.currentTarget;
+    
     const img = row.querySelector(".img");
     const rect = img.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
@@ -68,29 +63,50 @@ interface Project {
     img.style.bottom = "auto";
   };
 
-  const handleMouseClick = (event) => {
-    const row = event.currentTarget;
-    const images = JSON.parse(row.getAttribute("data-images"));
-    openLightbox(images, row);
-    console.log(images);
-  };
-
   let lightboxOpen = false;
 
+  let catOpen = null;
+
   document.addEventListener("DOMContentLoaded", () => {
-    const rows = document.querySelectorAll(".row");
+    
+    const categories = document.querySelectorAll(".row.categories div");
+    categories.forEach((category) => {
+      category.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const label = category.querySelector("p");
+        const selected = label.textContent.toLowerCase();
+
+        if (label.textContent == catOpen) {
+          catOpen = null;
+          // Riattiva tutte le row
+          document.querySelectorAll(".row.clickable").forEach((row) => {
+            row.classList.remove("off");
+          });
+        } else {
+          catOpen = label.textContent;
+          // Disattiva le row che non hanno la categoria selezionata
+          document.querySelectorAll(".row.clickable").forEach((row) => {
+            if (row.dataset[selected] !== "true") {
+              row.classList.add("off");
+            } else {
+              row.classList.remove("off");
+            }
+          });
+        }
+      });
+    });
+
+    const rows = document.querySelectorAll(".row.clickable");
     rows.forEach((row) => {
       row.addEventListener("mouseenter", handleMouseEnter);
       row.addEventListener("mouseleave", handleMouseLeave);
 
-      // row.addEventListener('click', handleMouseClick);
-
       row.addEventListener("click", (event) => {
         if (lightboxOpen) {
-          return; // Se il lightbox è già aperto, non fare nulla
+          return;
         }
-        lightboxOpen = true; // Imposta il flag per indicare che il lightbox è aperto
-        event.stopPropagation(); // Evita che il click si propaghi alla riga
+        lightboxOpen = true;
+        event.stopPropagation();
         const lightbox = event.target.querySelector(".lightbox-overlay");
         document.querySelectorAll(".row").forEach((r) => {
           r.classList.remove("open");
@@ -155,6 +171,20 @@ interface Project {
     <img src="ntn_logo.svg" alt="" />
   </div>
   <div class="container">
+    <div class="row categories">
+      <div class="left"></div>
+      <div class="right" >
+        <div class="labels">
+          <div><p>Interior</p></div>
+          <div><p>Exhibitions</p></div>
+          <div><p>Objects</p></div>
+          <div><p>Graphic</p></div>
+          <div><p>Research</p></div>
+          <div><p>Urbanism</p></div>
+        </div>
+      </div>
+      <div class="hide-mobile" />
+    </div>
     {
       [...projects]
         .sort((a, b) => a.year - b.year)
@@ -166,8 +196,14 @@ interface Project {
 
           return (
             <div
-              class="row"
+              class={`row ${project.active ? "clickable" : "off"}`}
               id={`row-${index}`}
+              data-interior={project.interior}
+              data-exhibition={project.exhibition}
+              data-objects={project.objects}
+              data-graphic={project.graphic}
+              data-research={project.research}
+              data-urbanism={project.urbanism}
               data-images={JSON.stringify(allImages)}
             >
               <img
@@ -340,6 +376,8 @@ interface Project {
       flex-direction: row;
       justify-content: flex-end;
       width: 100%;
+      align-items: flex-end;
+      user-select: none;
 
       div {
         width: 5px;
@@ -348,8 +386,16 @@ interface Project {
           writing-mode: sideways-lr;
           text-orientation: mixed;
           line-height: 1;
+          position: relative;
+          left: -25px;
+          transform-origin: bottom right;
           transform: rotate(45deg);
           text-transform: uppercase;
+          cursor: pointer;
+
+          &:hover {
+            color: rgb(255, 102, 0) !important;
+          }
         }
       }
     }
@@ -361,6 +407,11 @@ interface Project {
       width: 100%;
       position: relative;
       padding: 0.25rem 0;
+
+      &.off {
+        opacity: .25;
+        pointer-events: none;
+      }
 
       &.hided {
         opacity: 0.25;
@@ -376,14 +427,19 @@ interface Project {
         }
       }
 
+      &.clickable:hover {
+        
+        p {
+          color: rgb(255, 102, 0) !important;
+        }
+
+      }
+
       &.open {
         opacity: 1;
       }
 
       &:hover {
-        p {
-          color: rgb(255, 102, 0) !important;
-        }
 
         .img {
           display: block;
@@ -408,6 +464,7 @@ interface Project {
         gap: 2vw;
         width: 50vw;
         z-index: 100;
+        
 
         div {
           display: flex;
@@ -428,7 +485,7 @@ interface Project {
         align-items: flex-start;
         flex-direction: row;
         gap: 5vw;
-        pointer-events: none;
+        // pointer-events: none;
 
         .field {
           width: 5px;
@@ -448,46 +505,47 @@ interface Project {
       .right {
         .field {
           position: relative;
+          
 
-          &::before {
-            writing-mode: sideways-lr;
-            text-orientation: mixed;
-            line-height: 1;
-            transform: rotate(45deg);
-            text-transform: uppercase;
-            margin: 0;
-            font-family: monospace;
-            font-size: 0.8rem;
-            position: absolute;
-            bottom: 1rem;
-            left: 0.75rem;
-            pointer-events: none;
-            height: 70px;
-          }
+          // &::before {
+          //   writing-mode: sideways-lr;
+          //   text-orientation: mixed;
+          //   line-height: 1;
+          //   transform: rotate(45deg);
+          //   text-transform: uppercase;
+          //   margin: 0;
+          //   font-family: monospace;
+          //   font-size: 0.8rem;
+          //   position: absolute;
+          //   bottom: 1rem;
+          //   left: 0.75rem;
+          //   pointer-events: none;
+          //   height: 70px;
+          // }
 
-          &:nth-child(1)::before {
-            content: "interior";
-          }
+          // &:nth-child(1)::before {
+          //   content: "interior";
+          // }
 
-          &:nth-child(2)::before {
-            content: "exhibitions";
-          }
+          // &:nth-child(2)::before {
+          //   content: "exhibitions";
+          // }
 
-          &:nth-child(3)::before {
-            content: "objects";
-          }
+          // &:nth-child(3)::before {
+          //   content: "objects";
+          // }
 
-          &:nth-child(4)::before {
-            content: "graphic";
-          }
+          // &:nth-child(4)::before {
+          //   content: "graphic";
+          // }
 
-          &:nth-child(5)::before {
-            content: "research";
-          }
+          // &:nth-child(5)::before {
+          //   content: "research";
+          // }
 
-          &:nth-child(6)::before {
-            content: "urbanism";
-          }
+          // &:nth-child(6)::before {
+          //   content: "urbanism";
+          // }
         }
       }
     }
@@ -536,15 +594,20 @@ interface Project {
       }
     }
 
-    #row-0 {
+    .container .row {
+      gap: 0.5rem;
+    }
+
+    .row.categories {
       .right {
-        .field {
-          &::before {
+        .labels {
+          p {
             writing-mode: horizontal-tb !important;
             height: auto !important;
             transform: translateX(-50%) rotate(-90deg) !important;
             left: 3px !important;
             width: 0px !important;
+            transform-origin: unset;
           }
         }
       }
