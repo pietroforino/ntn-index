@@ -4,8 +4,6 @@ import { getProjects } from "../data/strapi";
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 
-import { createSignal } from "solid-js";
-
 const projects: {
   images: { url: string }[];
   main_image: { formats: { medium: { url: string } } };
@@ -13,8 +11,7 @@ const projects: {
   code: string;
   year: number;
   rank?: number;
-  interior?: boolean;
-  exhibition?: boolean;
+  spaces?: boolean;
   objects?: boolean;
   graphic?: boolean;
   research?: boolean;
@@ -48,13 +45,16 @@ interface Project {
     const rect = img.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
 
-    if (rect.bottom > viewportHeight) {
-      img.style.top = "auto";
+         img.style.top = "auto";
       img.style.bottom = "1.75rem";
-    } else {
-      img.style.top = "1.75rem";
-      img.style.bottom = "auto";
-    }
+
+    // // if (rect.bottom > viewportHeight) {
+    //   img.style.top = "auto";
+    //   img.style.bottom = "1.75rem";
+    // } else {
+      // img.style.top = "1.75rem";
+      // img.style.bottom = "auto";
+    // }
   };
 
   const handleMouseLeave = (event) => {
@@ -77,15 +77,23 @@ interface Project {
         const label = category.querySelector("p");
         const selected = label.textContent.toLowerCase();
 
+        document.querySelectorAll(".row.categories p.cat-active").forEach((p) => {
+            p.classList.remove("cat-active");
+          });
+
         if (label.textContent == catOpen) {
           catOpen = null;
-          // Riattiva tutte le row
+
+          
+          
           document.querySelectorAll(".row.clickable").forEach((row) => {
             row.classList.remove("off");
+            
+            // label.classList.remove('cat-active')
           });
         } else {
           catOpen = label.textContent;
-          // Disattiva le row che non hanno la categoria selezionata
+          label.classList.add('cat-active')
           document.querySelectorAll(".row.clickable").forEach((row) => {
             if (row.dataset[selected] !== "true") {
               row.classList.add("off");
@@ -176,8 +184,7 @@ interface Project {
       <div class="left"></div>
       <div class="right" >
         <div class="labels">
-          <div><p>Interior</p></div>
-          <div><p>Exhibitions</p></div>
+          <div><p>Spaces</p></div>
           <div><p>Objects</p></div>
           <div><p>Graphic</p></div>
           <div><p>Research</p></div>
@@ -199,8 +206,7 @@ interface Project {
             <div
               class={`row ${project.active ? "clickable" : "off"}`}
               id={`row-${index}`}
-              data-interior={project.interior}
-              data-exhibition={project.exhibition}
+              data-spaces={project.spaces}
               data-objects={project.objects}
               data-graphic={project.graphic}
               data-research={project.research}
@@ -209,12 +215,12 @@ interface Project {
             >
               <img
                 class="img"
-                src={mainImageUrl}
+                src={'http://localhost:1337' + mainImageUrl}
                 alt={project.title}
                 srcset={`
-              ${project.main_image.formats.small?.url} 500w,
-              ${project.main_image.formats.medium?.url} 750w,
-              ${project.main_image.formats.large?.url} 1000w
+              ${'http://localhost:1337' + project.main_image.formats.small?.url} 500w,
+              ${'http://localhost:1337' + project.main_image.formats.medium?.url} 750w,
+              ${'http://localhost:1337' + project.main_image.formats.large?.url} 1000w
             `}
                 sizes="(max-width: 600px) 500px, 
                    (max-width: 900px) 750px, 
@@ -228,8 +234,7 @@ interface Project {
                 <p>{project.title}</p>
               </div>
               <div class="right" style="pointer-events: none;">
-                <div class={`field ${project.interior ? "active" : ""}`} />
-                <div class={`field ${project.exhibition ? "active" : ""}`} />
+                <div class={`field ${project.spaces ? "active" : ""}`} />
                 <div class={`field ${project.objects ? "active" : ""}`} />
                 <div class={`field ${project.graphic ? "active" : ""}`} />
                 <div class={`field ${project.research ? "active" : ""}`} />
@@ -271,8 +276,18 @@ interface Project {
 
 <style lang="scss">
 
+  @font-face {
+    font-family: pp-supply;
+    src: url('/PP Supply/PPSupplyMono-Regular.otf') format("opentype");
+  }
+
+  body {
+    font-family: pp-supply;
+  }
+
   .menu {
-    padding: 0.5rem;
+    padding-left: 15vw;
+    padding-top: .5rem;
   }
 
   .lightbox-overlay {
@@ -340,7 +355,7 @@ interface Project {
 
   p {
     margin: 0;
-    font-family: monospace;
+    // font-family: monospace;
     font-size: 0.8rem;
   }
 
@@ -359,7 +374,7 @@ interface Project {
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    padding: 0.5rem;
+    padding: 15vw;
     padding-bottom: 0;
     // background: white;
 
@@ -388,17 +403,23 @@ interface Project {
           text-orientation: mixed;
           line-height: 1;
           position: relative;
-          left: -25px;
+          left: -12px;
           transform-origin: bottom right;
           transform: rotate(45deg);
           text-transform: uppercase;
           cursor: pointer;
+
+          
 
           &:hover {
             color: rgb(255, 102, 0) !important;
           }
         }
       }
+    }
+
+    .cat-active {
+      color: rgb(255, 102, 0) !important;
     }
 
     .row {
@@ -451,6 +472,10 @@ interface Project {
           pointer-events: none;
           z-index: 100;
         }
+
+        .field.active {
+            background-color: rgb(255, 102, 0) !important;
+          }
       }
 
       .img {
@@ -462,7 +487,7 @@ interface Project {
         justify-content: flex-start;
         align-items: flex-start;
         flex-direction: row;
-        gap: 2vw;
+        gap: 4vw;
         width: 50vw;
         z-index: 100;
         
@@ -470,7 +495,7 @@ interface Project {
         div {
           display: flex;
           flex-direction: row;
-          gap: 2vw;
+          gap: 4vw;
           pointer-events: none;
         }
 
@@ -593,6 +618,10 @@ interface Project {
         filter: invert(1);
         max-height: 80vh;
       }
+    }
+
+    .container {
+      padding: .5rem;
     }
 
     .container .row {

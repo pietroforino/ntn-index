@@ -3,7 +3,8 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
 
-const STRAPI_URL = 'https://timely-cow-17218bd8b1.strapiapp.com'; // Cambia se usi ambiente online
+// const STRAPI_URL = 'https://timely-cow-17218bd8b1.strapiapp.com'; // Cambia se usi ambiente online
+const STRAPI_URL = 'http://161.97.75.180:1338'; // Cambia se usi ambiente online
 const PROJECTS_API = `${STRAPI_URL}/api/projects?populate=*`; // Assicurati che le immagini siano incluse
 
 const downloadImage = async (url, name) => {

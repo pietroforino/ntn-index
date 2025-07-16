@@ -99,7 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateImage() {
     if (images.length > 0) {
-      imageElement.src = images[currentIndex];
+      imageElement.src = 'http://localhost:1337'+images[currentIndex];
       console.log(imageElement);
     }
   }

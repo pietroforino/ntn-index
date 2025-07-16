@@ -1,7 +1,7 @@
 export async function getProjects() {
   try {
-    // const response = await fetch('https://cmsportfolio-production.up.railway.app/api/projects?populate=*');
-    const response = await fetch('https://timely-cow-17218bd8b1.strapiapp.com/api/projects?customPopulate=nested');
+    const response = await fetch('http://161.97.75.180:1338/api/projects?populate=*');
+    // const response = await fetch('https://timely-cow-17218bd8b1.strapiapp.com/api/projects?customPopulate=nested');
     
     
     if (!response.ok) {
