@@ -215,16 +215,8 @@ interface Project {
             >
               <img
                 class="img"
-                src={'http://localhost:1337' + mainImageUrl}
+                src={mainImageUrl}
                 alt={project.title}
-                srcset={`
-              ${'http://localhost:1337' + project.main_image.formats.small?.url} 500w,
-              ${'http://localhost:1337' + project.main_image.formats.medium?.url} 750w,
-              ${'http://localhost:1337' + project.main_image.formats.large?.url} 1000w
-            `}
-                sizes="(max-width: 600px) 500px, 
-                   (max-width: 900px) 750px, 
-                   1000px"
               />
               <div class="left" style="pointer-events: none;">
                 <div>

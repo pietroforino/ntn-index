@@ -8,7 +8,7 @@ const STRAPI_URL = 'http://161.97.75.180:1338'; // Cambia se usi ambiente online
 const PROJECTS_API = `${STRAPI_URL}/api/projects?populate=*`; // Assicurati che le immagini siano incluse
 
 const downloadImage = async (url, name) => {
-  const dir = './public/project-images';
+  const dir = './public/uploads';
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
   const filePath = `${dir}/${name}`;
@@ -36,22 +36,35 @@ const downloadImage = async (url, name) => {
   const projects = json.data;
 
   for (const project of projects) {
-    const image = project.attributes?.image?.data; // Cambia il campo se necessario
-
-    if (!image) continue;
-
-    const images = Array.isArray(image) ? image : [image];
-
-    for (const img of images) {
-      const imgUrl = img.attributes?.url;
-      const imgName = img.attributes?.name;
-
-      if (imgUrl && imgName) {
-        const fullUrl = imgUrl.startsWith('http') ? imgUrl : `${STRAPI_URL}${imgUrl}`;
-        await downloadImage(fullUrl, imgName);
-      }
+    // Crea un array con tutte le immagini (main_image + gallery)
+    const allImages = [];
+    
+    // Verifica e aggiungi main_image se esiste
+    if (project.main_image) {
+        allImages.push(project.main_image);
     }
-  }
+    
+    // Verifica e aggiungi le immagini della gallery se esistono
+    if (project.gallery && Array.isArray(project.gallery)) {
+        allImages.push(...project.gallery);
+    }
+    
+    console.log(`Progetto ${project.title || 'Senza titolo'}:`, 
+                `trovate ${allImages.length} immagini`);
+    
+    // Processa ogni immagine
+    for (const img of allImages) {
+        if (!img) continue;
+        
+        const imgUrl = img.url;
+        const imgName = img.hash + img.ext;
+        
+        if (imgUrl && imgName) {
+            const fullUrl = imgUrl.startsWith('http') ? imgUrl : `${STRAPI_URL}${imgUrl}`;
+            await downloadImage(fullUrl, imgName);
+        }
+    }
+}
 
   console.log('✅ Completato!');
 })();
