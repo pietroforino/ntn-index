@@ -1,8 +1,12 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const STRAPI_MEDIA_BASE = process.env.STRAPI_URL;
+
 export async function getProjects() {
   try {
-    const response = await fetch('http://161.97.75.180:1338/api/projects?populate=*');
-    // const response = await fetch('https://timely-cow-17218bd8b1.strapiapp.com/api/projects?customPopulate=nested');
-    
+    const response = await fetch(STRAPI_MEDIA_BASE + '/api/projects?populate=*');
     
     if (!response.ok) {
       throw new Error(`Failed to fetch projects: ${response.statusText}`);
