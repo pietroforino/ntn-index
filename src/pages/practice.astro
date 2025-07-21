@@ -1,0 +1,61 @@
+---
+import Menu from "../components/Menu.astro";
+import "../css/style.scss";
+---
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+  </head>
+  <body>
+
+
+<main style="justify-content: flex-start;">
+  <Menu />
+
+  <div class="container">
+    <div class="row">
+      <div class="left" style="font-size: .8rem;">
+        <div style="visibility: hidden;">
+          <span>ntn/00</span>
+          <span>0000</span>
+        </div>
+        
+        <div style="display:flex; flex-direction: column;">
+          ANTONIO CIOPPA (1991) is a Milan-based architect working across interiors,
+          installations, product, and graphic design. His work is shaped by a radical
+          industrial* grammar that merges pure, archetypal forms with functional
+          aspects to create a language that is both clear and experimental. Through a
+          cross-disciplinary approach, his practice explores the intersection between
+          utility and expression, structure and aesthetics.
+          
+          <div style="font-size: .6rem;">
+            * Referring to, or characterized by, features typical of spaces dedicated to manufacturing,
+          production, or prefabrication—such as factories, workshops, and
+          laboratories. In addition, a significant part ofthis focus is on modular,
+          prefabricated, and monobloc elements.
+          </div>
+        </div>
+    
+      </div>
+      <div class="right">
+        <img src="/DaA_7lxW4AAjSj1.jpg" style="max-width: 300px;" alt="">
+      </div>
+    </div>
+    
+  </div>
+</main>
+  </body>
+</html>
+
+
+<style>
+  @media (max-width: 720px) {
+    .row {
+      flex-direction: column-reverse;
+    }
+  }
+</style>
