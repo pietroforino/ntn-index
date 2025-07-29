@@ -4,8 +4,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const STRAPI_URL = process.env.STRAPI_URL; // Cambia se usi ambiente online
-const PROJECTS_API = `${STRAPI_URL}/api/projects?populate=*`; // Assicurati che le immagini siano incluse
+const STRAPI_URL = process.env.STRAPI_URL;
+const PROJECTS_API = `${STRAPI_URL}/api/projects?populate=*`;
 
 const downloadImage = async (url, name) => {
   const dir = './public/uploads';

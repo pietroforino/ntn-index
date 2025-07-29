@@ -1,6 +1,10 @@
 ---
 import Menu from "../components/Menu.astro";
 import "../css/style.scss";
+
+import { getContacts } from "../data/strapi";
+
+const contacts = await getContacts();
 ---
 
 <html lang="it">
@@ -17,27 +21,37 @@ import "../css/style.scss";
 
       <div class="container">
         <div class="row">
-          <div class="left" style="font-size: .8rem;">
+          <div class="left" style="font-size: .8rem;" >
             <div style="visibility: hidden;">
               <span>ntn/00</span>
               <span>0000</span>
             </div>
 
-            <div style="display:flex; flex-direction: column;">
-              WRITE AT: INFO@NTNINDEX.COM   <br>
-              CALL AT: (+39) 3280823488     <br>
-              COME IN: MILAN, ITALY         <br>
-              FOLLOW : @NTN.INDEX           <br>
+            <div style="display:flex; flex-direction: column;pointer-events: all; gap: .25rem;color:white" >
+              {
+                contacts.single.map((item: { label: unknown; link: string | URL | null | undefined; content: unknown; }) => (
+                  <div style="pointer-events: all">
+                    <span  style="width: 100px;">{item.label}:</span> {item.link ? <a href={item.link}>{item.content}</a> : <span>{item.content}</span>}<br />
+                  </div>
+                ))
+              }
             </div>
           </div>
-          
         </div>
       </div>
     </main>
   </body>
 </html>
 
-<style>
+<style lang="scss">
+  a {
+    color: white;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   @media (max-width: 720px) {
     .left {
       width: 100% !important;

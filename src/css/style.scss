@@ -1,3 +1,7 @@
+:root {
+  --orange: rgb(0, 125, 207);   //rgb(255, 102, 0)
+}
+
 @font-face {
     font-family: pp-supply;
     src: url('/PP Supply/PPSupplyMono-Regular.otf') format("opentype");
@@ -19,7 +23,7 @@
     width: 100%;
 
     a {
-      color: black;
+      color: white;
       text-decoration: none;
 
       &:hover {
@@ -51,6 +55,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: none;
   }
 
   .lightbox-content img {
@@ -69,6 +74,7 @@
     line-height: 1;
     cursor: pointer;
     color: black;
+    pointer-events: all;
   }
 
   .lightbox-arrow {
@@ -81,6 +87,7 @@
     padding: 0px;
     z-index: 100;
     background-color: transparent;
+    pointer-events: all;
   }
 
   .lightbox-arrow.prev {
@@ -104,9 +111,10 @@
   main {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 20vh;
     min-height: 100vh;
     align-items: center;
+    background-color: white;
   }
   .container {
     display: flex;
@@ -116,6 +124,7 @@
     padding-bottom: 0;
     align-items: center;
     width: 100%;
+    margin-top: 40vh;
 
     &:hover {
       .row {
@@ -133,9 +142,11 @@
       width: 100%;
       align-items: flex-end;
       user-select: none;
+      background-color: black;
 
       div {
         width: 5px;
+        user-select: none;
 
         p {
           writing-mode: sideways-lr;
@@ -147,18 +158,18 @@
           transform: rotate(45deg);
           text-transform: uppercase;
           cursor: pointer;
-
-          
+          color: white;
+          user-select: none;
 
           &:hover {
-            color: rgb(255, 102, 0) !important;
+            color: var(--orange) !important;
           }
         }
       }
     }
 
     .cat-active {
-      color: rgb(255, 102, 0) !important;
+      color: var(--orange) !important;
     }
 
     .row {
@@ -170,12 +181,20 @@
       padding: 0.25rem 0;
 
       &.off {
-        opacity: .25;
         pointer-events: none;
+
+        p {
+          color: rgba(255,255,255,.25) !important;
+        }
       }
 
       &.hided {
-        opacity: 0.25;
+        pointer-events: none;
+
+        p {
+          color: rgba(255,255,255,0.25) !important;
+          z-index: 0;
+        }
 
         .img {
           display: none !important;
@@ -191,13 +210,19 @@
       &.clickable:hover {
         
         p {
-          color: rgb(255, 102, 0) !important;
+          color: var(--orange) !important;
         }
 
       }
 
       &.open {
+        pointer-events: none;
         opacity: 1;
+        overflow: hidden;
+
+        .left {
+          pointer-events: none;
+        }
       }
 
       &:hover {
@@ -213,7 +238,7 @@
         }
 
         .field.active {
-            background-color: rgb(255, 102, 0) !important;
+            background-color: var(--orange) !important;
           }
       }
 
@@ -226,21 +251,22 @@
         justify-content: flex-start;
         align-items: flex-start;
         flex-direction: row;
-        gap: 4vw;
+        gap: 2.5vw;
         width: 50vw;
         z-index: 100;
+        mix-blend-mode: difference;
         
 
         div {
           display: flex;
           flex-direction: row;
-          gap: 4vw;
+          gap: 2.5vw;
           pointer-events: none;
         }
 
         p {
           cursor: pointer;
-          color: black;
+          color: rgba(255,255,255,1);
         }
       }
 
@@ -250,17 +276,18 @@
         align-items: flex-start;
         flex-direction: row;
         gap: 5vw;
+        mix-blend-mode: difference;
         // pointer-events: none;
 
         .field {
           width: 5px;
           height: 5px;
-          background-color: white;
+          background-color: black;
           margin: 0;
           border-radius: 100%;
 
           &.active {
-            background-color: black;
+            background-color: white;
           }
         }
       }
@@ -382,6 +409,8 @@
     }
 
     .row.categories {
+      padding-bottom: 2rem;
+
       .right {
         .labels {
           p {
@@ -391,11 +420,13 @@
             left: 3px !important;
             width: 0px !important;
             transform-origin: unset;
+            color: white;
           }
         }
       }
     }
     .labels div p {
+      color: white;
       transform: rotate(90deg);
     }
   }

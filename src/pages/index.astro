@@ -7,8 +7,12 @@ import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 
 const projects: {
+gallery: never[];
+active: any;
   images: { url: string }[];
-  main_image: { formats: { medium: { url: string } } };
+  main_image: {
+url: any; formats: { medium: { url: string } } 
+};
   title: string;
   code: string;
   year: number;
@@ -122,6 +126,7 @@ interface Project {
           r.classList.add("hided");
         });
         event.target.classList.add("open");
+        event.target.classList.remove("hided");
         if (lightbox) {
           lightbox.style.display = "flex";
           currentIndex = 0;
@@ -193,9 +198,8 @@ interface Project {
     </div>
     {
       [...projects]
-        .sort((a, b) => a.rank - b.rank)
+        .sort((a, b) => a.rank! - b.rank!)
         .map((project, index) => {
-          // Raccolta immagini (main + gallery)
           const mainImageUrl = project.main_image.url;
           const galleryImages = (project.gallery || []).map((img) => img.url);
           const allImages = [mainImageUrl, ...galleryImages];
@@ -236,20 +240,19 @@ interface Project {
                 <button class="lightbox-close">
                   <img src="close-icon.svg" alt="" />
                 </button>
-                <button class="lightbox-arrow prev">
+                <button class="lightbox-arrow prev" style={`${ allImages.length <= 1 && 'opacity: 0'}`}>
                   <img src="arrow-left.svg" alt="" />
                 </button>
                 <div class="lightbox-content">
                   {allImages.map((image, imgIndex) => (
                     <img
-                      key={imgIndex}
                       src={image}
                       alt={`Image ${imgIndex + 1} of ${project.title}`}
                       class="lightbox-image"
                     />
                   ))}
                 </div>
-                <button class="lightbox-arrow next">
+                <button class="lightbox-arrow next" style={`${ allImages.length <= 1 && 'opacity: 0'}`}>
                   <img src="arrow-right.svg" alt="" />
                 </button>
               </div>

@@ -3,7 +3,7 @@
 
 <div class="menu">
     <a href="/">
-        <img src="../ntn_logo.svg" alt="" />
+        <img src="../ntn_logo_white.svg" alt="" />
     </a>
     <a href="/">index</a>
     <a href="/practice/">practice</a>
@@ -13,11 +13,22 @@
 
 <style lang="scss">
 .menu {
-
+  z-index: 1000;
+  mix-blend-mode: difference;
+  position: fixed;
+  
   img {
-    width: 122px;
-    margin-right: calc(4vw - 1rem);
+    width: 103px;
+    margin-right: calc(2.5vw - 1rem);
   }
 
 }
 </style>
+
+<script is:inline>
+  window.addEventListener("load", () => {
+    const w = document.querySelector('.left div').offsetWidth
+    const i = document.querySelector('.menu img').style.width = w + "px"
+    console.log('width ', w);
+  });
+</script>
