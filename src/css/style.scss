@@ -1,5 +1,5 @@
 :root {
-  --orange: rgb(0, 125, 207);   //rgb(255, 102, 0)
+  --orange: rgb(0, 153, 255);   //rgb(255, 102, 0)
 }
 
 @font-face {
@@ -255,7 +255,6 @@
         width: 50vw;
         z-index: 100;
         mix-blend-mode: difference;
-        
 
         div {
           display: flex;
