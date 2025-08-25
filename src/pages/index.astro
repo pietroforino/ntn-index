@@ -7,7 +7,11 @@ import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 
 const projects: {
-  gallery: never[];
+  gallery: {
+    [x: string]: any;
+    url: any;
+    formats: { medium: { url: string } };
+  };
   active: any;
   images: { url: string }[];
   main_image: {
@@ -228,7 +232,7 @@ interface Project {
             .map((project, index) => {
               const mainImageUrl = project.main_image.url;
               const galleryImages = (project.gallery || []).map(
-                (img) => img.url
+                (img: { url: any; }) => img.url
               );
               const allImages = [mainImageUrl, ...galleryImages];
 
