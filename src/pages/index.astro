@@ -1,18 +1,19 @@
 ---
-import '../css/style.scss'
+import "../css/style.scss";
 import { getProjects } from "../data/strapi";
 
-import Menu from '../components/Menu.astro';
+import Menu from "../components/Menu.astro";
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
 
 const projects: {
-gallery: never[];
-active: any;
+  gallery: never[];
+  active: any;
   images: { url: string }[];
   main_image: {
-url: any; formats: { medium: { url: string } } 
-};
+    url: any;
+    formats: { medium: { url: string } };
+  };
   title: string;
   code: string;
   year: number;
@@ -41,227 +42,256 @@ interface Project {
   <body>
     <!-- <slot /> -->
 
-<script is:inline>
-  const handleMouseEnter = (event) => {
-    const row = event.currentTarget;
-    
-    const img = row.querySelector(".img");
-    const rect = img.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
+    <script is:inline>
+      const handleMouseEnter = (event) => {
+        const row = event.currentTarget;
 
-         img.style.top = "auto";
-      img.style.bottom = "1.75rem";
+        const img = row.querySelector(".img");
+        const rect = img.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
 
-    // // if (rect.bottom > viewportHeight) {
-    //   img.style.top = "auto";
-    //   img.style.bottom = "1.75rem";
-    // } else {
-      // img.style.top = "1.75rem";
-      // img.style.bottom = "auto";
-    // }
-  };
+        img.style.top = "auto";
+        img.style.bottom = "1.75rem";
 
-  const handleMouseLeave = (event) => {
-    const row = event.currentTarget;
-    const img = row.querySelector(".img");
-    img.style.top = "1.75rem";
-    img.style.bottom = "auto";
-  };
+        // // if (rect.bottom > viewportHeight) {
+        //   img.style.top = "auto";
+        //   img.style.bottom = "1.75rem";
+        // } else {
+        // img.style.top = "1.75rem";
+        // img.style.bottom = "auto";
+        // }
+      };
 
-  let lightboxOpen = false;
+      const handleMouseLeave = (event) => {
+        const row = event.currentTarget;
+        const img = row.querySelector(".img");
+        img.style.top = "1.75rem";
+        img.style.bottom = "auto";
+      };
 
-  let catOpen = null;
+      let lightboxOpen = false;
 
-  document.addEventListener("DOMContentLoaded", () => {
-    
-    const categories = document.querySelectorAll(".row.categories div");
-    categories.forEach((category) => {
-      category.addEventListener("click", (event) => {
-        event.stopPropagation();
-        const label = category.querySelector("p");
-        const selected = label.textContent.toLowerCase();
+      let catOpen = null;
 
-        document.querySelectorAll(".row.categories p.cat-active").forEach((p) => {
-            p.classList.remove("cat-active");
-          });
+      document.addEventListener("DOMContentLoaded", () => {
+        const categories = document.querySelectorAll(".row.categories div");
+        categories.forEach((category) => {
+          category.addEventListener("click", (event) => {
+            event.stopPropagation();
+            const label = category.querySelector("p");
+            const selected = label.textContent.toLowerCase();
 
-        if (label.textContent == catOpen) {
-          catOpen = null;
+            document
+              .querySelectorAll(".row.categories p.cat-active")
+              .forEach((p) => {
+                p.classList.remove("cat-active");
+              });
 
-          
-          
-          document.querySelectorAll(".row.clickable").forEach((row) => {
-            row.classList.remove("off");
-            
-            // label.classList.remove('cat-active')
-          });
-        } else {
-          catOpen = label.textContent;
-          label.classList.add('cat-active')
-          document.querySelectorAll(".row.clickable").forEach((row) => {
-            if (row.dataset[selected] !== "true") {
-              row.classList.add("off");
+            if (label.textContent == catOpen) {
+              catOpen = null;
+
+              document.querySelectorAll(".row.clickable").forEach((row) => {
+                row.classList.remove("off");
+
+                // label.classList.remove('cat-active')
+              });
             } else {
-              row.classList.remove("off");
+              catOpen = label.textContent;
+              label.classList.add("cat-active");
+              document.querySelectorAll(".row.clickable").forEach((row) => {
+                if (row.dataset[selected] !== "true") {
+                  row.classList.add("off");
+                } else {
+                  row.classList.remove("off");
+                }
+              });
             }
           });
-        }
-      });
-    });
-
-    const rows = document.querySelectorAll(".row.clickable");
-    rows.forEach((row) => {
-      row.addEventListener("mouseenter", handleMouseEnter);
-      row.addEventListener("mouseleave", handleMouseLeave);
-
-      row.addEventListener("click", (event) => {
-        if (lightboxOpen) {
-          return;
-        }
-        lightboxOpen = true;
-        event.stopPropagation();
-        const lightbox = event.target.querySelector(".lightbox-overlay");
-        document.querySelectorAll(".row").forEach((r) => {
-          r.classList.remove("open");
-          r.classList.add("hided");
         });
-        event.target.classList.add("open");
-        event.target.classList.remove("hided");
-        if (lightbox) {
-          lightbox.style.display = "flex";
-          currentIndex = 0;
-          updateImage();
-        }
-      });
 
-      const prevButton = row.querySelector(".lightbox-arrow.prev");
-      const nextButton = row.querySelector(".lightbox-arrow.next");
-      const imagesElement = row.querySelectorAll(".lightbox-image");
+        const rows = document.querySelectorAll(".row.clickable");
+        rows.forEach((row) => {
+          row.addEventListener("mouseenter", handleMouseEnter);
+          row.addEventListener("mouseleave", handleMouseLeave);
 
-      let currentIndex = 0;
-
-      function updateImage() {
-        if (imagesElement.length > 1) {
-          imagesElement.forEach((img, index) => {
-            img.style.display = index === currentIndex ? "block" : "none";
+          row.addEventListener("click", (event) => {
+            if (lightboxOpen) {
+              return;
+            }
+            lightboxOpen = true;
+            event.stopPropagation();
+            const lightbox = event.target.querySelector(".lightbox-overlay");
+            document.querySelectorAll(".row").forEach((r) => {
+              r.classList.remove("open");
+              r.classList.add("hided");
+            });
+            event.target.classList.add("open");
+            event.target.classList.remove("hided");
+            if (lightbox) {
+              lightbox.style.display = "flex";
+              currentIndex = 0;
+              updateImage();
+            }
           });
-        }
-      }
 
-      prevButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Prevent closing the lightbox
-        currentIndex =
-          (currentIndex - 1 + imagesElement.length) % imagesElement.length;
-        updateImage();
-      });
+          const prevButton = row.querySelector(".lightbox-arrow.prev");
+          const nextButton = row.querySelector(".lightbox-arrow.next");
+          const imagesElement = row.querySelectorAll(".lightbox-image");
 
-      nextButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Prevent closing the lightbox
-        currentIndex = (currentIndex + 1) % imagesElement.length;
-        updateImage();
-      });
+          let currentIndex = 0;
 
-      const closeButton = row.querySelector(".lightbox-close");
-      if (closeButton) {
-        closeButton.addEventListener("click", (event) => {
-          event.stopPropagation(); // Evita che il click si propaghi alla riga
-          const lightbox = row.querySelector(".lightbox-overlay");
-          document.querySelectorAll(".row").forEach((r) => {
-            r.classList.remove("open");
-            r.classList.remove("hided");
+          function updateImage() {
+            if (imagesElement.length > 1) {
+              imagesElement.forEach((img, index) => {
+                img.style.display = index === currentIndex ? "block" : "none";
+              });
+            }
+          }
+
+          prevButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            currentIndex =
+              (currentIndex - 1 + imagesElement.length) % imagesElement.length;
+            updateImage();
           });
-          if (lightbox) {
-            lightbox.style.display = "none"; // Nascondi la lightbox
-            lightboxOpen = false;
+
+          nextButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            currentIndex = (currentIndex + 1) % imagesElement.length;
+            updateImage();
+          });
+
+          const close = (e) => {
+            e.stopPropagation();
+            const lightbox = row.querySelector(".lightbox-overlay");
+            document.querySelectorAll(".row").forEach((r) => {
+              r.classList.remove("open");
+              r.classList.remove("hided");
+            });
+            if (lightbox) {
+              lightbox.style.display = "none";
+              lightboxOpen = false;
+            }
+          };
+
+          document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+              close(event);
+            } else if (event.key === "ArrowLeft") {
+              if (lightboxOpen) {
+                currentIndex =
+                  (currentIndex - 1 + imagesElement.length) %
+                  imagesElement.length;
+                updateImage();
+              }
+            } else if (event.key === "ArrowRight") {
+              if (lightboxOpen) {
+                currentIndex = (currentIndex + 1) % imagesElement.length;
+                updateImage();
+              }
+            }
+          });
+
+          document.addEventListener("click", (event) => {
+            close(event);
+          });
+
+          const closeButton = row.querySelector(".lightbox-close");
+          if (closeButton) {
+            closeButton.addEventListener("click", (event) => {
+              close(event);
+            });
           }
         });
-      }
-    });
-  });
-</script>
+      });
+    </script>
 
-<main>
-  <Menu/>
-  <div class="container">
-    <div class="row categories">
-      <div class="left"></div>
-      <div class="right" >
-        <div class="labels">
-          <div><p>Spaces</p></div>
-          <div><p>Objects</p></div>
-          <div><p>Graphic</p></div>
-          <div><p>Research</p></div>
-          <div><p>Macro</p></div>
-        </div>
-      </div>
-      <div class="hide-mobile" />
-    </div>
-    {
-      [...projects]
-        .sort((a, b) => a.rank! - b.rank!)
-        .map((project, index) => {
-          const mainImageUrl = project.main_image.url;
-          const galleryImages = (project.gallery || []).map((img) => img.url);
-          const allImages = [mainImageUrl, ...galleryImages];
-
-          return (
-            <div
-              class={`row ${project.active ? "clickable" : "off"}`}
-              id={`row-${index}`}
-              data-spaces={project.spaces}
-              data-objects={project.objects}
-              data-graphic={project.graphic}
-              data-research={project.research}
-              data-urbanism={project.urbanism}
-              data-images={JSON.stringify(allImages)}
-            >
-              <img
-                class="img"
-                src={mainImageUrl}
-                alt={project.title}
-              />
-              <div class="left" style="pointer-events: none;">
-                <div>
-                  <p>{project.code}</p>
-                  <p>{project.year}</p>
-                </div>
-                <p>{project.title}</p>
-              </div>
-              <div class="right" style="pointer-events: none;">
-                <div class={`field ${project.spaces ? "active" : ""}`} />
-                <div class={`field ${project.objects ? "active" : ""}`} />
-                <div class={`field ${project.graphic ? "active" : ""}`} />
-                <div class={`field ${project.research ? "active" : ""}`} />
-                <div class={`field ${project.urbanism ? "active" : ""}`} />
-              </div>
-              <div class="hide-mobile" />
-
-              <div class="lightbox-overlay" style="display: none;">
-                <button class="lightbox-close">
-                  <img src="close-icon.svg" alt="" />
-                </button>
-                <button class="lightbox-arrow prev" style={`${ allImages.length <= 1 && 'opacity: 0'}`}>
-                  <img src="arrow-left.svg" alt="" />
-                </button>
-                <div class="lightbox-content">
-                  {allImages.map((image, imgIndex) => (
-                    <img
-                      src={image}
-                      alt={`Image ${imgIndex + 1} of ${project.title}`}
-                      class="lightbox-image"
-                    />
-                  ))}
-                </div>
-                <button class="lightbox-arrow next" style={`${ allImages.length <= 1 && 'opacity: 0'}`}>
-                  <img src="arrow-right.svg" alt="" />
-                </button>
-              </div>
+    <main>
+      <Menu />
+      <div class="container">
+        <div class="row categories">
+          <div class="left"></div>
+          <div class="right">
+            <div class="labels">
+              <div><p>Spaces</p></div>
+              <div><p>Objects</p></div>
+              <div><p>Graphic</p></div>
+              <div><p>Research</p></div>
+              <div><p>Macro</p></div>
             </div>
-          );
-        })
-    }
-  </div>
-</main>
+          </div>
+          <div class="hide-mobile"></div>
+        </div>
+        {
+          [...projects]
+            .sort((a, b) => a.rank! - b.rank!)
+            .map((project, index) => {
+              const mainImageUrl = project.main_image.url;
+              const galleryImages = (project.gallery || []).map(
+                (img) => img.url
+              );
+              const allImages = [mainImageUrl, ...galleryImages];
+
+              return (
+                <div
+                  class={`row ${project.active ? "clickable" : "off"}`}
+                  id={`row-${index}`}
+                  data-spaces={project.spaces}
+                  data-objects={project.objects}
+                  data-graphic={project.graphic}
+                  data-research={project.research}
+                  data-urbanism={project.urbanism}
+                  data-images={JSON.stringify(allImages)}
+                >
+                  <img class="img" src={mainImageUrl} alt={project.title} />
+                  <div class="left" style="pointer-events: none;">
+                    <div>
+                      <p>{project.code}</p>
+                      <p>{project.year}</p>
+                    </div>
+                    <p>{project.title}</p>
+                  </div>
+                  <div class="right" style="pointer-events: none;">
+                    <div class={`field ${project.spaces ? "active" : ""}`} />
+                    <div class={`field ${project.objects ? "active" : ""}`} />
+                    <div class={`field ${project.graphic ? "active" : ""}`} />
+                    <div class={`field ${project.research ? "active" : ""}`} />
+                    <div class={`field ${project.urbanism ? "active" : ""}`} />
+                  </div>
+                  <div class="hide-mobile" />
+
+                  <div class="lightbox-overlay" style="display: none;">
+                    <button class="lightbox-close">
+                      <img src="close-icon.svg" alt="" />
+                    </button>
+                    <button
+                      class="lightbox-arrow prev"
+                      style={`${allImages.length <= 1 && "opacity: 0"}`}
+                    >
+                      <img src="arrow-left.svg" alt="" />
+                    </button>
+                    <div class="lightbox-content">
+                      {allImages.map((image, imgIndex) => (
+                        <img
+                          src={image}
+                          alt={`Image ${imgIndex + 1} of ${project.title}`}
+                          class="lightbox-image"
+                        />
+                      ))}
+                    </div>
+                    <button
+                      class="lightbox-arrow next"
+                      style={`${allImages.length <= 1 && "opacity: 0"}`}
+                    >
+                      <img src="arrow-right.svg" alt="" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })
+        }
+      </div>
+    </main>
   </body>
 </html>
 
