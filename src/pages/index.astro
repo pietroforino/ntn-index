@@ -1,6 +1,6 @@
 ---
 import "../css/style.scss";
-import { getProjects } from "../data/strapi";
+import { getOrderedProjects } from "../data/strapi";
 
 import Menu from "../components/Menu.astro";
 import Analytics from "@vercel/analytics/astro";
@@ -29,7 +29,7 @@ const projects: {
   graphic?: boolean;
   research?: boolean;
   urbanism?: boolean;
-}[] = await getProjects();
+}[] = await getOrderedProjects();
 
 interface Project {
   main_image: { formats: { medium: { url: string } } };
@@ -276,85 +276,79 @@ interface Project {
         </div>
         <div style="width: 100%;">
           {
-            [...projects]
-              .sort((a, b) => a.rank! - b.rank!)
-              .map((project, index) => {
-                const mainImageUrl = project.main_image.url;
-                const galleryImages = (project.gallery || []).map(
-                  (img: { url: any }) => img.url
-                );
-                const allImages = [mainImageUrl, ...galleryImages];
+            [...projects].map((project, index) => {
+              const mainImageUrl = project.main_image.url;
+              const galleryImages = (project.gallery || []).map(
+                (img: { url: any }) => img.url
+              );
+              const allImages = [mainImageUrl, ...galleryImages];
 
-                return (
-                  <div
-                    class={`row ${project.active ? "clickable" : "off"}`}
-                    id={`row-${index}`}
-                    data-spaces={project.spaces}
-                    data-objects={project.objects}
-                    data-graphic={project.graphic}
-                    data-research={project.research}
-                    data-macro={project.urbanism}
-                    data-images={JSON.stringify(allImages)}
-                  >
-                    <img class="img" src={mainImageUrl} alt={project.title} />
-                    <div class="left" style="pointer-events: none;">
-                      <div>
-                        <p>{project.code}</p>
-                        <p>{project.year}</p>
-                      </div>
-                      <p>{project.title}</p>
+              return (
+                <div
+                  class={`row ${project.active ? "clickable" : "off"}`}
+                  id={`row-${index}`}
+                  data-spaces={project.spaces}
+                  data-objects={project.objects}
+                  data-graphic={project.graphic}
+                  data-research={project.research}
+                  data-macro={project.urbanism}
+                  data-images={JSON.stringify(allImages)}
+                >
+                  <img class="img" src={mainImageUrl} alt={project.title} />
+                  <div class="left" style="pointer-events: none;">
+                    <div>
+                      <p>{project.code}</p>
+                      <p>{project.year}</p>
                     </div>
-                    <div class="right" style="pointer-events: none;">
-                      <div class={`field ${project.spaces ? "active" : ""}`} />
-                      <div class={`field ${project.objects ? "active" : ""}`} />
-                      <div class={`field ${project.graphic ? "active" : ""}`} />
-                      <div
-                        class={`field ${project.research ? "active" : ""}`}
-                      />
-                      <div
-                        class={`field ${project.urbanism ? "active" : ""}`}
-                      />
-                    </div>
-                    <div class="hide-mobile" />
-
-                    <div class="lightbox-overlay" style="display: none;">
-                      <button class="lightbox-close">
-                        <img src="close-icon.svg" alt="" />
-                      </button>
-                      {project.description && (
-                        <button class="lightbox-plus">
-                          <img src="plus-icon.svg" alt="" />
-                        </button>
-                      )}
-
-                      <button
-                        class="lightbox-arrow prev"
-                        style={`${allImages.length <= 1 && "opacity: 0"}`}
-                      >
-                        <img src="arrow-left.svg" alt="" />
-                      </button>
-                      <div class="lightbox-content">
-                        {allImages.map((image, imgIndex) => (
-                          <img
-                            src={image}
-                            alt={`Image ${imgIndex + 1} of ${project.title}`}
-                            class="lightbox-image"
-                          />
-                        ))}
-                      </div>
-                      <button
-                        class="lightbox-arrow next"
-                        style={`${allImages.length <= 1 && "opacity: 0"}`}
-                      >
-                        <img src="arrow-right.svg" alt="" />
-                      </button>
-                    </div>
-                    <div class="info">
-                      <p>{project.description}</p>
-                    </div>
+                    <p>{project.title}</p>
                   </div>
-                );
-              })
+                  <div class="right" style="pointer-events: none;">
+                    <div class={`field ${project.spaces ? "active" : ""}`} />
+                    <div class={`field ${project.objects ? "active" : ""}`} />
+                    <div class={`field ${project.graphic ? "active" : ""}`} />
+                    <div class={`field ${project.research ? "active" : ""}`} />
+                    <div class={`field ${project.urbanism ? "active" : ""}`} />
+                  </div>
+                  <div class="hide-mobile" />
+
+                  <div class="lightbox-overlay" style="display: none;">
+                    <button class="lightbox-close">
+                      <img src="close-icon.svg" alt="" />
+                    </button>
+                    {project.description && (
+                      <button class="lightbox-plus">
+                        <img src="plus-icon.svg" alt="" />
+                      </button>
+                    )}
+
+                    <button
+                      class="lightbox-arrow prev"
+                      style={`${allImages.length <= 1 && "opacity: 0"}`}
+                    >
+                      <img src="arrow-left.svg" alt="" />
+                    </button>
+                    <div class="lightbox-content">
+                      {allImages.map((image, imgIndex) => (
+                        <img
+                          src={image}
+                          alt={`Image ${imgIndex + 1} of ${project.title}`}
+                          class="lightbox-image"
+                        />
+                      ))}
+                    </div>
+                    <button
+                      class="lightbox-arrow next"
+                      style={`${allImages.length <= 1 && "opacity: 0"}`}
+                    >
+                      <img src="arrow-right.svg" alt="" />
+                    </button>
+                  </div>
+                  <div class="info">
+                    <p>{project.description}</p>
+                  </div>
+                </div>
+              );
+            })
           }
         </div>
       </div>
