@@ -9,6 +9,14 @@
   --orange: rgb(255, 102, 0);
   --bg-color: black;
   --text-color: white;
+
+  .lightbox-arrow img, .lightbox-close img, .lightbox-plus img {
+    filter: invert(1);
+  }
+
+  .container .row.open .left p {
+    color: var(--text-color) !important;
+  }
 }
 
 @font-face {
@@ -113,7 +121,8 @@
     z-index: 10;
 
     &.show {
-      display: block;
+      display: flex;
+      align-items: flex-end;
     }
   }
 
@@ -144,7 +153,6 @@
 
   p {
     margin: 0;
-    // font-family: monospace;
     font-size: 0.8rem;
   }
 
@@ -489,5 +497,17 @@
     .labels div p {
       color: var(--bg-color);
       transform: rotate(90deg);
+    }
+
+    .info {
+      position: fixed;
+      width: calc(100vw - 1rem);
+      right: .5rem;
+      bottom: 96px;
+      font-size: 0.8rem;
+      color: var(--bg-color);
+      mix-blend-mode: exclusion;
+      display: none;
+      z-index: 10;
     }
   }
