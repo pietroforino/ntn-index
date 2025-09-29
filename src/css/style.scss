@@ -254,7 +254,7 @@
           z-index: 0;
         }
 
-        .field {
+        .field.active {
           background-color: rgba(0,0,0,0.25) !important;
         }
 
@@ -317,7 +317,7 @@
       .left {
         display: flex;
         justify-content: flex-start;
-        align-items: center;
+        align-items: flex-start;
         flex-direction: row;
         gap: 2.5vw;
         width: 50vw;
