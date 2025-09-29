@@ -1,10 +1,32 @@
 ---
 import Menu from "../components/Menu.astro";
 import "../css/style.scss";
-
+import { AstroSeo } from "@astrolib/seo";
 import { getContacts } from "../data/strapi";
 
 const contacts = await getContacts();
+
+<AstroSeo
+  title="Contacts | NTNINDEX - Antonio Cioppa Architect in Milan"
+  description="Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar."
+  canonical="https://www.ntnindex.com/"
+  openGraph={{
+    url: "https://www.ntnindex.com/",
+    title: "Contacts | NTNINDEX - Antonio Cioppa | Architect in Milan",
+    description:
+      "Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar.",
+    images: [
+      {
+        url: "https://www.ntnindex.com/pixel.jpg",
+        width: 800,
+        height: 600,
+        alt: "Og Image Alt",
+        type: "image/jpeg",
+      },
+    ],
+    site_name: "NTNINDEX",
+  }}
+/>;
 ---
 
 <html lang="it">

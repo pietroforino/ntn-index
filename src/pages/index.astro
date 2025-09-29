@@ -5,6 +5,7 @@ import { getProjects } from "../data/strapi";
 import Menu from "../components/Menu.astro";
 import Analytics from "@vercel/analytics/astro";
 import SpeedInsights from "@vercel/speed-insights/astro";
+import { AstroSeo } from "@astrolib/seo";
 
 const projects: {
   gallery: {
@@ -42,6 +43,28 @@ interface Project {
     <meta
       name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+
+    <AstroSeo
+      title="NTNINDEX - Antonio Cioppa | Architect in Milan"
+      description="Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar."
+      canonical="https://www.ntnindex.com/"
+      openGraph={{
+        url: "https://www.ntnindex.com/",
+        title: "NTNINDEX - Antonio Cioppa | Architect in Milan",
+        description:
+          "Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar.",
+        images: [
+          {
+            url: "https://www.ntnindex.com/pixel.jpg",
+            width: 800,
+            height: 600,
+            alt: "Og Image Alt",
+            type: "image/jpeg",
+          },
+        ],
+        site_name: "NTNINDEX",
+      }}
     />
 
     <script>
