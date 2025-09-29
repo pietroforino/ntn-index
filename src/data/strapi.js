@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// const STRAPI_MEDIA_BASE = process.env.STRAPI_URL;
+const STRAPI_MEDIA_BASE = process.env.STRAPI_URL;
 
-const STRAPI_MEDIA_BASE = "http://localhost:1338";
+// const STRAPI_MEDIA_BASE = "http://localhost:1338";
 
 export async function getProjects() {
   try {
