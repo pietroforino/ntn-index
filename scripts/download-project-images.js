@@ -1,14 +1,15 @@
-import fs from 'fs';
-import fetch from 'node-fetch';
-import dotenv from 'dotenv';
+import fs from "fs";
+import fetch from "node-fetch";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 const STRAPI_URL = process.env.STRAPI_URL;
 const PROJECTS_API = `${STRAPI_URL}/api/projects?populate=*`;
+const CONTACT_API = `${STRAPI_URL}/api/about?populate=*`;
 
 const downloadImage = async (url, name) => {
-  const dir = './public/uploads';
+  const dir = "./public/uploads";
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
   const filePath = `${dir}/${name}`;
@@ -29,42 +30,43 @@ const downloadImage = async (url, name) => {
 };
 
 (async () => {
-  console.log('📡 Recupero progetti da Strapi...');
+  console.log("📡 Recupero progetti da Strapi...");
   const res = await fetch(PROJECTS_API);
   const json = await res.json();
 
+  const cntcs = await fetch(CONTACT_API);
+  const json_cntcs = await cntcs.json();
+
   const projects = json.data;
+  const contacts = json_cntcs.data;
+  const imgstodownload = [...projects, contacts];
 
-  for (const project of projects) {
-    // Crea un array con tutte le immagini (main_image + gallery)
+  for (const project of imgstodownload) {
     const allImages = [];
-    
-    // Verifica e aggiungi main_image se esiste
     if (project.main_image) {
-        allImages.push(project.main_image);
+      allImages.push(project.main_image);
+    } else if (project.about_image) {
+      allImages.push(project.about_image);
     }
-    
-    // Verifica e aggiungi le immagini della gallery se esistono
-    if (project.gallery && Array.isArray(project.gallery)) {
-        allImages.push(...project.gallery);
-    }
-    
-    console.log(`Progetto ${project.title || 'Senza titolo'}:`, 
-                `trovate ${allImages.length} immagini`);
-    
-    // Processa ogni immagine
-    for (const img of allImages) {
-        if (!img) continue;
-        
-        const imgUrl = img.url;
-        const imgName = img.hash + img.ext;
-        
-        if (imgUrl && imgName) {
-            const fullUrl = imgUrl.startsWith('http') ? imgUrl : `${STRAPI_URL}${imgUrl}`;
-            await downloadImage(fullUrl, imgName);
-        }
-    }
-}
 
-  console.log('✅ Completato!');
+    if (project.gallery && Array.isArray(project.gallery)) {
+      allImages.push(...project.gallery);
+    }
+
+    for (const img of allImages) {
+      if (!img) continue;
+
+      const imgUrl = img.url;
+      const imgName = img.hash + img.ext;
+
+      if (imgUrl && imgName) {
+        const fullUrl = imgUrl.startsWith("http")
+          ? imgUrl
+          : `${STRAPI_URL}${imgUrl}`;
+        await downloadImage(fullUrl, imgName);
+      }
+    }
+  }
+
+  console.log("✅ Completato!");
 })();

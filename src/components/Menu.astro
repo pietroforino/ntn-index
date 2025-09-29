@@ -1,34 +1,70 @@
----
----
-
 <div class="menu">
-    <a href="/">
-        <img src="../ntn_logo_white.svg" alt="" />
-    </a>
-    <a href="/">index</a>
-    <a href="/practice/">practice</a>
-    <a href="/contacts/">contacts</a>
-    <a target="_blank" href="https://ntnindex.bigcartel.com">objects</a>
+  <a href="/">
+    <img src="../ntn_logo_white.svg" alt="" />
+  </a>
+  <a href="/">index</a>
+  <a href="/practice/">practice</a>
+  <a href="/contacts/">contacts</a>
+  <a target="_blank" href="https://ntnindex.bigcartel.com">objects</a>
+  <span id="theme-toggle"></span>
 </div>
 
 <style lang="scss">
-.menu {
-  z-index: 1000;
-  mix-blend-mode: difference;
-  position: fixed;
-  
-  img {
-    width: 103px;
-    margin-right: calc(2.5vw - 1rem);
-  }
+  .menu {
+    z-index: 1000;
+    mix-blend-mode: difference;
+    position: fixed;
 
-}
+    img {
+      width: 103px;
+      margin-right: calc(2.5vw - 1rem);
+    }
+  }
 </style>
 
 <script is:inline>
-  window.addEventListener("load", () => {
-    const w = document.querySelector('.left div').offsetWidth
-    const i = document.querySelector('.menu img').style.width = w + "px"
-    console.log('width ', w);
+  const btn = document.getElementById("theme-toggle");
+  const main = document.querySelector("main");
+
+  // inizializza stato dal localStorage
+  const saved = localStorage.getItem("theme");
+  if (saved === "night") {
+    main?.classList.add("night");
+    btn.textContent = "DARK";
+  } else {
+    btn.textContent = "LIGHT";
+  }
+
+  btn?.addEventListener("click", () => {
+    const html = document.documentElement;
+    const isNight = html.dataset.theme === "night";
+    btn.textContent = !isNight ? "DARK" : "LIGHT";
+    if (isNight) {
+      html.dataset.theme = "light";
+      localStorage.setItem("theme", "light");
+    } else {
+      html.dataset.theme = "night";
+      localStorage.setItem("theme", "night");
+    }
   });
+
+  // const btn = document.getElementById("theme-toggle");
+  // const main = document.querySelector("main");
+
+  // // inizializza stato dal localStorage
+  // const saved = localStorage.getItem("theme");
+  // if (saved === "night") {
+  //   main?.classList.add("night");
+  //   btn.textContent = "DARK";
+  // } else {
+  //   btn.textContent = "LIGHT";
+  // }
+
+  // // toggle al click
+  // btn?.addEventListener("click", () => {
+  //   if (!main) return;
+  //   const isNight = main.classList.toggle("night");
+  //   btn.textContent = isNight ? "DARK" : "LIGHT";
+  //   localStorage.setItem("theme", isNight ? "night" : "day");
+  // });
 </script>

@@ -1,5 +1,14 @@
 :root {
-  --orange: rgb(0, 153, 255);   //rgb(255, 102, 0)
+  --orange: rgb(255, 102, 0);
+  --bg-color: white;
+  --text-color: black;
+}
+
+
+[data-theme="night"] {
+  --orange: rgb(255, 102, 0);
+  --bg-color: black;
+  --text-color: white;
 }
 
 @font-face {
@@ -22,7 +31,7 @@
     max-width: 960px;
     width: 100%;
 
-    a {
+    a, span {
       color: white;
       text-decoration: none;
 
@@ -38,7 +47,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0);
+    // background: rgba(255, 255, 255, 0);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -50,9 +59,9 @@
     position: relative;
     max-width: 100%;
     padding: .5rem;
-    height: 80vh;
-    max-height: 80vh;
-    aspect-ratio: 1 / 1;
+    height: 85vh;
+    max-height: 85vh;
+    // aspect-ratio: 1 / 1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,8 +83,38 @@
     font-size: 1.5rem;
     line-height: 1;
     cursor: pointer;
-    color: black;
+    color: var(--text-color);
     pointer-events: all;
+    z-index: 100;
+  }
+  .lightbox-plus {
+    position: absolute;
+    top: 48px;
+    right: 0px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-color);
+    pointer-events: all;
+    z-index: 100;
+  }
+
+  .info {
+    position: fixed;
+    width: 25vw;
+    right: 0;
+    top: 96px;
+    font-size: 0.8rem;
+    color: var(--bg-color);
+    mix-blend-mode: exclusion;
+    display: none;
+    z-index: 10;
+
+    &.show {
+      display: block;
+    }
   }
 
   .lightbox-arrow {
@@ -89,6 +128,10 @@
     z-index: 100;
     background-color: transparent;
     pointer-events: all;
+
+    img {
+      width: 90%;
+    }
   }
 
   .lightbox-arrow.prev {
@@ -115,7 +158,7 @@
     gap: 20vh;
     min-height: 100vh;
     align-items: center;
-    background-color: white;
+    background-color: var(--bg-color);
   }
   .container {
     display: flex;
@@ -127,14 +170,6 @@
     width: 100%;
     margin-top: 40vh;
 
-    &:hover {
-      .row {
-        p {
-          // color: #00000080 !important
-        }
-      }
-    }
-
     .labels {
       display: flex;
       gap: 5vw;
@@ -143,7 +178,6 @@
       width: 100%;
       align-items: flex-end;
       user-select: none;
-      background-color: black;
 
       div {
         width: 5px;
@@ -159,7 +193,7 @@
           transform: rotate(45deg);
           text-transform: uppercase;
           cursor: pointer;
-          color: white;
+          color: var(--text-color);
           user-select: none;
 
           &:hover {
@@ -185,7 +219,21 @@
         pointer-events: none;
 
         p {
-          color: rgba(255,255,255,.25) !important;
+          color: var(--text-color) !important;
+          opacity: .25;
+        }
+      }
+
+       &.off-cat {
+        pointer-events: none;
+
+        p {
+          color: var(--text-color) !important;
+          opacity: .25;
+        }
+
+        .right div.active {
+          background-color: rgba(0,0,0,.25) !important;
         }
       }
 
@@ -193,8 +241,13 @@
         pointer-events: none;
 
         p {
-          color: rgba(255,255,255,0.25) !important;
+          color: var(--text-color) !important;
+          opacity: .25;
           z-index: 0;
+        }
+
+        .field {
+          background-color: rgba(0,0,0,0.25) !important;
         }
 
         .img {
@@ -203,12 +256,12 @@
 
         &:hover {
           p {
-            color: black !important;
+            color: var(--text-color) !important;
           }
         }
       }
 
-      &.clickable:hover {
+      &.clickable:hover:not(.open) {
         
         p {
           color: var(--orange) !important;
@@ -219,15 +272,20 @@
       &.open {
         pointer-events: none;
         opacity: 1;
-        overflow: hidden;
+        // overflow: hidden;
 
         .left {
           pointer-events: none;
           z-index: 10;
+          mix-blend-mode: difference;
+
+          p {
+            color: var(--bg-color) !important;
+          }
         }
       }
 
-      &:hover {
+      &:hover:not(.open) {
 
         .img {
           display: block;
@@ -251,12 +309,12 @@
       .left {
         display: flex;
         justify-content: flex-start;
-        align-items: flex-start;
+        align-items: center;
         flex-direction: row;
         gap: 2.5vw;
         width: 50vw;
         z-index: 0;
-        mix-blend-mode: difference;
+        
 
         div {
           display: flex;
@@ -267,7 +325,7 @@
 
         p {
           cursor: pointer;
-          color: rgba(255,255,255,1);
+          color: var(--text-color) !important;
         }
       }
 
@@ -277,18 +335,18 @@
         align-items: flex-start;
         flex-direction: row;
         gap: 5vw;
-        mix-blend-mode: difference;
+        // mix-blend-mode: difference;
         // pointer-events: none;
 
         .field {
           width: 5px;
           height: 5px;
-          background-color: black;
+          background-color: var(--bg-color);
           margin: 0;
           border-radius: 100%;
 
           &.active {
-            background-color: white;
+            background-color: var(--text-color);
           }
         }
       }
@@ -347,7 +405,7 @@
   @media (max-width: 720px) {
 
     main {
-      padding: .5rem;
+      // padding: .5rem;
       gap: 10rem;
     }
 
@@ -377,7 +435,7 @@
 
       p {
         cursor: pointer;
-        color: black;
+        color: var(--text-color);
       }
     }
     
@@ -401,8 +459,10 @@
       }
     }
 
-    .container {
-      padding: .5rem;
+    .container, .menu {
+      margin-left: .5rem;
+      margin-right: 0.5rem;
+      width: calc(100% - 1rem);
     }
 
     .container .row {
@@ -421,13 +481,13 @@
             left: 3px !important;
             width: 0px !important;
             transform-origin: unset;
-            color: white;
+            color: var(--text-color);
           }
         }
       }
     }
     .labels div p {
-      color: white;
+      color: var(--bg-color);
       transform: rotate(90deg);
     }
   }
