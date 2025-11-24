@@ -1,11 +1,13 @@
 <div class="menu">
-  <a href="/">
-    <img src="../ntn_logo_white.svg" alt="" />
-  </a>
-  <a href="/">index</a>
-  <a href="/practice/">practice</a>
-  <a href="/contacts/">contacts</a>
-  <a target="_blank" href="https://ntnindex.bigcartel.com">objects</a>
+  <div class="submenu">
+    <a href="/">
+      <img src="../ntn_logo_white.svg" alt="" />
+    </a>
+    <a href="/">index</a>
+    <a href="/practice/">practice</a>
+    <a href="/contacts/">contacts</a>
+    <a target="_blank" href="https://ntnindex.bigcartel.com">objects</a>
+  </div>
   <span id="theme-toggle"></span>
 </div>
 
@@ -14,6 +16,14 @@
     z-index: 1000;
     mix-blend-mode: difference;
     position: fixed;
+
+    .submenu {
+      display: flex;
+      padding-top: 0.5rem;
+      align-items: center;
+      gap: 1rem;
+      padding: 0;
+    }
 
     img {
       width: 103px;
@@ -30,15 +40,15 @@
   const saved = localStorage.getItem("theme");
   if (saved === "night") {
     main?.classList.add("night");
-    btn.textContent = "DARK";
+    btn.textContent = "🌙";
   } else {
-    btn.textContent = "LIGHT";
+    btn.textContent = "☀️";
   }
 
   btn?.addEventListener("click", () => {
     const html = document.documentElement;
     const isNight = html.dataset.theme === "night";
-    btn.textContent = !isNight ? "DARK" : "LIGHT";
+    btn.textContent = !isNight ? "🌙" : "☀️";
     if (isNight) {
       html.dataset.theme = "light";
       localStorage.setItem("theme", "light");

@@ -31,19 +31,26 @@
   .menu {
     font-size: 0.8rem;
     text-transform: uppercase;
-    // padding: 0 15vw;
     display: flex;
     padding-top: 0.5rem;
     align-items: center;
     gap: 1rem;
     max-width: 960px;
-    width: 100%;
+    width: calc(100% - 20px);
+    padding: 10px;
+    // left: 0;
+    justify-content: space-between;
 
     a, span {
       color: white;
       text-decoration: none;
+      cursor: pointer;
 
-      &:hover {
+      #theme-toggle {
+        mix-blend-mode: difference;
+      }
+
+      &:hover:not(#theme-toggle) {
         text-decoration: underline;
       }
     }
@@ -67,8 +74,8 @@
     position: relative;
     max-width: 100%;
     padding: .5rem;
-    height: 85vh;
-    max-height: 85vh;
+    height: 78vh;
+    max-height: 78vh;
     // aspect-ratio: 1 / 1;
     display: flex;
     justify-content: center;
@@ -112,7 +119,7 @@
   .info {
     position: fixed;
     width: 25vw;
-    right: 0;
+    right: 20px;
     top: 96px;
     font-size: 0.8rem;
     color: var(--bg-color);
@@ -175,8 +182,9 @@
     max-width: 960px;
     padding-bottom: 0;
     align-items: center;
-    width: 100%;
-    margin-top: 40vh;
+    width: calc(100% - 20px);
+    margin-top: 25vh;
+    padding: 10px;
 
     .labels {
       display: flex;
@@ -418,7 +426,21 @@
     }
 
     .menu {
-      justify-content: flex-start;
+      justify-content: space-between;
+
+      .submenu {
+        width: 100%;
+        gap: .75rem !important;
+
+        a:first-child {
+          flex: 1;
+          max-width: 128px !important;
+
+          img {
+            width: 100% !important;
+          }
+        }
+      }
 
       img {
         width: 45px !important;
@@ -433,6 +455,8 @@
       gap: 2vw;
       width: 70vw !important;
       z-index: 100;
+
+
 
       div {
         display: flex;
@@ -458,7 +482,6 @@
     }
 
     .lightbox-arrow {
-      transform: scale(0.5);
       mix-blend-mode: difference;
 
       img {
@@ -467,14 +490,38 @@
       }
     }
 
-    .container, .menu {
+    .container {
       margin-left: .5rem;
       margin-right: 0.5rem;
       width: calc(100% - 1rem);
-    }
 
-    .container .row {
-      gap: 0.5rem;
+      max-height: calc(80vh - 20px);
+      margin-top: 20vh;
+
+      .content {
+        height: -webkit-fill-available;
+        overflow: scroll;
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        scrollbar-width: none;  /* Firefox, Safari 18.2+, Chromium 121+ */
+
+        &::-webkit-scrollbar { 
+          display: none;  /* Older Safari and Chromium */
+        }
+      }
+      
+      .row {
+        gap: 0.5rem;
+
+        &.hided {
+          opacity: 0;
+        }
+
+        &.open {
+          .left {
+            opacity: 0;
+          }
+        }
+      }
     }
 
     .row.categories {
