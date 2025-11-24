@@ -420,6 +420,10 @@
 
   @media (max-width: 720px) {
 
+    body {
+      overflow: hidden;
+    }
+
     main {
       // padding: .5rem;
       gap: 10rem;
