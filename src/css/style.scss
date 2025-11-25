@@ -372,47 +372,6 @@
       .right {
         .field {
           position: relative;
-          
-
-          // &::before {
-          //   writing-mode: sideways-lr;
-          //   text-orientation: mixed;
-          //   line-height: 1;
-          //   transform: rotate(45deg);
-          //   text-transform: uppercase;
-          //   margin: 0;
-          //   font-family: monospace;
-          //   font-size: 0.8rem;
-          //   position: absolute;
-          //   bottom: 1rem;
-          //   left: 0.75rem;
-          //   pointer-events: none;
-          //   height: 70px;
-          // }
-
-          // &:nth-child(1)::before {
-          //   content: "interior";
-          // }
-
-          // &:nth-child(2)::before {
-          //   content: "exhibitions";
-          // }
-
-          // &:nth-child(3)::before {
-          //   content: "objects";
-          // }
-
-          // &:nth-child(4)::before {
-          //   content: "graphic";
-          // }
-
-          // &:nth-child(5)::before {
-          //   content: "research";
-          // }
-
-          // &:nth-child(6)::before {
-          //   content: "urbanism";
-          // }
         }
       }
     }

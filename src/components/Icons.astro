@@ -1,0 +1,113 @@
+---
+/*
+  Props:
+    - icons: array di URL o data-URI per le icone (default di esempio)
+    - size: dimensione icona in px (default 64)
+    - z: z-index del layer (default 9999)
+*/
+const { icons = ["👾", "🤯", "🫀", "🔩"], size = 64, z = 0 } = Astro.props;
+---
+
+<style>
+  .icons-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: var(--z, 9999);
+  }
+
+  .floating-icon {
+    position: absolute;
+    width: var(--size, 64px);
+    height: var(--size, 64px);
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 1;
+    will-change: transform, opacity;
+    font-size: 42px;
+  }
+</style>
+
+<div
+  class="icons-layer"
+  id="icons-layer"
+  style={`--size: ${size}px; --z: ${z};`}
+>
+  <div class="floating-icon" id="floating-icon">
+    <span id="floating-icon-img">{icons[0]}</span>
+  </div>
+</div>
+
+<script is:inline type="module">
+  (function () {
+    const icons = ["👾", "🤯", "🫀", "🔩"];
+    const layer = document.getElementById("icons-layer");
+    const btn = document.getElementById("floating-icon");
+    const img = document.getElementById("floating-icon-img");
+    const size =
+      parseInt(getComputedStyle(layer).getPropertyValue("--size")) || 64;
+
+    let currentIndex = 0;
+
+    function randInt(max) {
+      return Math.floor(Math.random() * max);
+    }
+
+    function placeRandom() {
+      const vw = Math.max(
+        document.documentElement.clientWidth || 0,
+        window.innerWidth || 0
+      );
+      const vh = Math.max(
+        document.documentElement.clientHeight || 0,
+        window.innerHeight || 0
+      );
+
+      const padding = 12;
+      const maxLeft = Math.max(0, vw - size - padding);
+      const maxTop = Math.max(0, vh - size - padding);
+
+      const left = randInt(maxLeft) + padding;
+      const top = randInt(maxTop) + padding;
+
+      btn.style.left = left + "px";
+      btn.style.top = top + "px";
+    }
+
+    function pickDifferentIndex() {
+      if (icons.length <= 1) return 0;
+      let next = currentIndex;
+      while (next === currentIndex) {
+        next = randInt(icons.length);
+      }
+      return next;
+    }
+
+    placeRandom();
+
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(placeRandom, 120);
+    });
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      btn.classList.add("hidden");
+
+      const next = pickDifferentIndex();
+      currentIndex = next;
+      img.innerHTML = icons[currentIndex];
+      placeRandom();
+      requestAnimationFrame(() => {
+        btn.classList.remove("hidden");
+      });
+    });
+
+    setTimeout(() => {
+      btn.style.opacity = 1;
+    }, 300);
+  })();
+</script>
