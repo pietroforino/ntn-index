@@ -13,10 +13,19 @@ import Icons from "../components/Icons.astro";
     <a href="/contacts/">contacts</a>
     <a target="_blank" href="https://ntnindex.bigcartel.com">objects</a>
   </div>
-  <span id="theme-toggle"></span>
+  <div id="theme-toggle"></div>
 </div>
 
 <style lang="scss">
+  #theme-toggle {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    cursor: pointer;
+    background-color: white;
+    user-select: none;
+  }
+
   .menu {
     z-index: 1000;
     mix-blend-mode: difference;
@@ -44,15 +53,15 @@ import Icons from "../components/Icons.astro";
   const saved = localStorage.getItem("theme");
   if (saved === "night") {
     main?.classList.add("night");
-    btn.textContent = "🌙";
+    btn.style.backgroundColor = "white";
   } else {
-    btn.textContent = "☀️";
+    btn.style.backgroundColor = "white";
   }
 
   btn?.addEventListener("click", () => {
     const html = document.documentElement;
     const isNight = html.dataset.theme === "night";
-    btn.textContent = !isNight ? "🌙" : "☀️";
+    btn.style.backgroundColor = !isNight ? "white" : "white";
     if (isNight) {
       html.dataset.theme = "light";
       localStorage.setItem("theme", "light");
