@@ -4,7 +4,6 @@ import { getOrderedProjects } from "../data/strapi";
 
 import Menu from "../components/Menu.astro";
 import Analytics from "@vercel/analytics/astro";
-import SpeedInsights from "@vercel/speed-insights/astro";
 import { AstroSeo } from "@astrolib/seo";
 
 const projects: {
@@ -44,14 +43,32 @@ interface Project {
       name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"
     />
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/favicon/apple-touch-icon.png"
+    />
+    <meta
+      name="apple-mobile-web-app-title"
+      content="NTN - Architect in Milan"
+    />
+    <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <AstroSeo
-      title="NTNINDEX - Antonio Cioppa | Architect in Milan"
+      title="NTN - Architect in Milan"
       description="Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar."
       canonical="https://www.ntnindex.com/"
       openGraph={{
         url: "https://www.ntnindex.com/",
-        title: "NTNINDEX - Antonio Cioppa | Architect in Milan",
+        title: "NTN - Architect in Milan",
         description:
           "Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar.",
         images: [
@@ -63,7 +80,7 @@ interface Project {
             type: "image/jpeg",
           },
         ],
-        site_name: "NTNINDEX",
+        site_name: "NTN - Architect in Milan",
       }}
     />
 
@@ -357,4 +374,3 @@ interface Project {
 </html>
 
 <Analytics />
-<SpeedInsights />

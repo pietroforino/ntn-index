@@ -41,7 +41,6 @@ import Icons from "../components/Icons.astro";
   const btn = document.getElementById("theme-toggle");
   const main = document.querySelector("main");
 
-  // inizializza stato dal localStorage
   const saved = localStorage.getItem("theme");
   if (saved === "night") {
     main?.classList.add("night");
@@ -62,24 +61,4 @@ import Icons from "../components/Icons.astro";
       localStorage.setItem("theme", "night");
     }
   });
-
-  // const btn = document.getElementById("theme-toggle");
-  // const main = document.querySelector("main");
-
-  // // inizializza stato dal localStorage
-  // const saved = localStorage.getItem("theme");
-  // if (saved === "night") {
-  //   main?.classList.add("night");
-  //   btn.textContent = "DARK";
-  // } else {
-  //   btn.textContent = "LIGHT";
-  // }
-
-  // // toggle al click
-  // btn?.addEventListener("click", () => {
-  //   if (!main) return;
-  //   const isNight = main.classList.toggle("night");
-  //   btn.textContent = isNight ? "DARK" : "LIGHT";
-  //   localStorage.setItem("theme", isNight ? "night" : "day");
-  // });
 </script>

@@ -1,11 +1,5 @@
 ---
-/*
-  Props:
-    - icons: array di URL o data-URI per le icone (default di esempio)
-    - size: dimensione icona in px (default 64)
-    - z: z-index del layer (default 9999)
-*/
-const { icons = ["👾", "🤯", "🫀", "🔩"], size = 64, z = 100 } = Astro.props;
+const { icons = ["🔩", "🛠️", "📁", "🔗"], size = 64, z = 100 } = Astro.props;
 ---
 
 <style>
@@ -28,6 +22,12 @@ const { icons = ["👾", "🤯", "🫀", "🔩"], size = 64, z = 100 } = Astro.p
     will-change: transform, opacity;
     font-size: 42px;
   }
+
+  @media screen and (min-width: 480px) {
+    .icons-layer {
+      display: none;
+    }
+  }
 </style>
 
 <div
@@ -42,7 +42,7 @@ const { icons = ["👾", "🤯", "🫀", "🔩"], size = 64, z = 100 } = Astro.p
 
 <script is:inline type="module">
   (function () {
-    const icons = ["👾", "🤯", "🫀", "🔩"];
+    const icons = ["🔩", "🛠️", "📁", "🔗"];
     const layer = document.getElementById("icons-layer");
     const btn = document.getElementById("floating-icon");
     const img = document.getElementById("floating-icon-img");
@@ -61,8 +61,8 @@ const { icons = ["👾", "🤯", "🫀", "🔩"], size = 64, z = 100 } = Astro.p
         window.innerWidth || 0
       );
       const vh = Math.max(
-        document.documentElement.clientHeight || 0,
-        window.innerHeight || 0
+        document.documentElement.clientHeight - 50 || 0,
+        window.innerHeight - 50 || 0
       );
 
       const padding = 12;
@@ -70,7 +70,7 @@ const { icons = ["👾", "🤯", "🫀", "🔩"], size = 64, z = 100 } = Astro.p
       const maxTop = Math.max(0, vh - size - padding);
 
       const left = randInt(maxLeft) + padding;
-      const top = randInt(maxTop) + padding;
+      const top = randInt(maxTop) + 50 + padding;
 
       btn.style.left = left + "px";
       btn.style.top = top + "px";
@@ -93,10 +93,15 @@ const { icons = ["👾", "🤯", "🫀", "🔩"], size = 64, z = 100 } = Astro.p
       resizeTimeout = setTimeout(placeRandom, 120);
     });
 
+    let counter = 0;
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
       btn.classList.add("hidden");
-
+      counter++;
+      if (counter > 4) {
+        document.querySelector(".icons-layer").remove();
+        return;
+      }
       const next = pickDifferentIndex();
       currentIndex = next;
       img.innerHTML = icons[currentIndex];
