@@ -1,6 +1,7 @@
 ---
 import "../css/style.scss";
 import { getOrderedProjects } from "../data/strapi";
+import Icons from "../components/Icons.astro";
 
 import Menu from "../components/Menu.astro";
 import Analytics from "@vercel/analytics/astro";
@@ -56,21 +57,18 @@ interface Project {
       sizes="180x180"
       href="/favicon/apple-touch-icon.png"
     />
-    <meta
-      name="apple-mobile-web-app-title"
-      content="NTN - Architect in Milan"
-    />
+    <meta name="apple-mobile-web-app-title" content="NTN Index" />
     <link rel="manifest" href="/favicon/site.webmanifest" />
 
     <AstroSeo
-      title="NTN - Architect in Milan"
-      description="Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar."
+      title="NTN Index"
+      description="NTN Index is the ongoing archive of an independent design practice, exploring interiors, exhibitions, objects and spatial investigations."
       canonical="https://www.ntnindex.com/"
       openGraph={{
         url: "https://www.ntnindex.com/",
-        title: "NTN - Architect in Milan",
+        title: "NTN Index",
         description:
-          "Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar.",
+          "NTN Index is the ongoing archive of an independent design practice, exploring interiors, exhibitions, objects and spatial investigations.",
         images: [
           {
             url: "https://www.ntnindex.com/pixel.jpg",
@@ -80,7 +78,7 @@ interface Project {
             type: "image/jpeg",
           },
         ],
-        site_name: "NTN - Architect in Milan",
+        site_name: "NTN Index",
       }}
     />
 
@@ -276,6 +274,7 @@ interface Project {
     </script>
 
     <main>
+      <Icons />
       <Menu />
       <div class="container">
         <div class="row categories">
@@ -286,7 +285,7 @@ interface Project {
               <div><p>Objects</p></div>
               <div><p>Graphic</p></div>
               <div><p>Research</p></div>
-              <div><p>Macro</p></div>
+              <!-- <div><p>Macro</p></div> -->
             </div>
           </div>
           <div class="hide-mobile"></div>
@@ -296,7 +295,7 @@ interface Project {
             [...projects].map((project, index) => {
               const mainImageUrl = project.main_image.url;
               const galleryImages = (project.gallery || []).map(
-                (img: { url: any }) => img.url
+                (img: { url: any }) => img.url,
               );
               const allImages = [mainImageUrl, ...galleryImages];
 
@@ -324,7 +323,6 @@ interface Project {
                     <div class={`field ${project.objects ? "active" : ""}`} />
                     <div class={`field ${project.graphic ? "active" : ""}`} />
                     <div class={`field ${project.research ? "active" : ""}`} />
-                    <div class={`field ${project.urbanism ? "active" : ""}`} />
                   </div>
                   <div class="hide-mobile" />
 

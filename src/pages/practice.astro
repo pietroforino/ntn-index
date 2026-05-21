@@ -9,14 +9,14 @@ const about = await getInformations();
 ---
 
 <AstroSeo
-  title="Practice | NTN - Architect in Milan"
-  description="Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar."
+  title="Practice | NTN Index"
+  description="NTN Index is the ongoing archive of an independent design practice, exploring interiors, exhibitions, objects and spatial investigations."
   canonical="https://www.ntnindex.com/"
   openGraph={{
     url: "https://www.ntnindex.com/",
-    title: "Practice | NTN - Architect in Milan",
+    title: "Practice | NTN Index",
     description:
-      "Architect Antonio Cioppa (1991), Milan-based, works across interiors, installations, product & graphic design with a radical industrial grammar.",
+      "NTN Index is the ongoing archive of an independent design practice, exploring interiors, exhibitions, objects and spatial investigations.",
     images: [
       {
         url: "https://www.ntnindex.com/pixel.jpg",
@@ -26,7 +26,7 @@ const about = await getInformations();
         type: "image/jpeg",
       },
     ],
-    site_name: "NTN - Architect in Milan",
+    site_name: "NTN Index",
   }}
 />
 
@@ -56,14 +56,16 @@ const about = await getInformations();
       <Menu />
 
       <div class="container">
-        <div class="row">
+        <div class="row" style="gap: 8vw">
           <div class="left" style="font-size: .8rem;">
             <div style="visibility: hidden;">
               <span>ntn/00</span>
               <span>0000</span>
             </div>
 
-            <div style="display:flex; flex-direction: column;">
+            <div
+              style="display:flex;margin-bottom: -40px;flex-direction: column-reverse;"
+            >
               <p>
                 {about?.main_text}
               </p>
