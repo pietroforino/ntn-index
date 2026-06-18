@@ -263,9 +263,15 @@ interface Project {
               if (row.querySelector(".info").classList.contains("show")) {
                 plusButton.querySelector("img").src = "plus-icon.svg";
                 row.querySelector(".info").classList.remove("show");
+                row.querySelector(".lightbox-content").style.opacity = 1;
+                document.querySelector(".floating-icon").style.opacity = 1;
+                console.log(row.querySelector(".lightbox-content"));
+                
               } else {
                 plusButton.querySelector("img").src = "minus-icon.svg";
                 row.querySelector(".info").classList.add("show");
+                row.querySelector(".lightbox-content").style.opacity = .2;
+                document.querySelector(".floating-icon").style.opacity = 0;
               }
             });
           }

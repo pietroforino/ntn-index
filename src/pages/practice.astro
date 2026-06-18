@@ -58,7 +58,7 @@ const about = await getInformations();
       <div class="container">
         <div class="row" style="gap: 8vw">
           <div class="left" style="font-size: .8rem;">
-            <div style="visibility: hidden;">
+            <div style="visibility: hidden;" class="space-holder">
               <span>ntn/00</span>
               <span>0000</span>
             </div>
@@ -88,7 +88,14 @@ const about = await getInformations();
 </html>
 
 <style>
+  .space-holder {
+    display: block !important;
+  }
   @media (max-width: 720px) {
+    .space-holder {
+      display: none !important;
+    }
+
     .row {
       flex-direction: column-reverse;
     }
