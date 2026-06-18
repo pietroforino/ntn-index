@@ -77,7 +77,6 @@ const about = await getInformations();
           <div class="right">
             <img
               src={about?.about_image?.url}
-              style="max-width: 300px;"
               alt=""
             />
           </div>
@@ -91,6 +90,10 @@ const about = await getInformations();
   .space-holder {
     display: block !important;
   }
+
+  .right img {
+    max-width: 300px;
+  }
   @media (max-width: 720px) {
     .space-holder {
       display: none !important;
@@ -98,6 +101,14 @@ const about = await getInformations();
 
     .row {
       flex-direction: column-reverse;
+    }
+
+    .right img {
+      max-width: 100%;
+    }
+
+    .left {
+      width: 100% !important;
     }
   }
 </style>
